@@ -59,6 +59,11 @@ export default function Admin() {
               <span className="text-slate-300">/</span>
               <span className="text-sm font-semibold text-slate-800">Product Admin</span>
             </div>
+            <div className="flex items-center gap-2 border-l border-slate-100 pl-4">
+              <Link to="/AdminNews">
+                <Button variant="ghost" size="sm" className="rounded-full text-slate-500 text-xs">News Admin ↗</Button>
+              </Link>
+            </div>
             <div className="flex items-center gap-2">
               <Link to="/Home">
                 <Button variant="ghost" size="sm" className="rounded-full text-slate-500 text-xs">
