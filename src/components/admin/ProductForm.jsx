@@ -107,8 +107,14 @@ export default function ProductForm({ product, onClose }) {
                 <ImageUploader value={form.main_image} onChange={(v) => set("main_image", v)} label="main image" />
                 <AIImageProcessor
                   imageUrl={form.main_image}
-                  onApplyMain={(url) => set("main_image", url)}
-                  onApplyGallery={(url) => set("gallery_images", [...(form.gallery_images || []), url])}
+                  onApplyMain={(url) => {
+                    if (!form.main_image) set("main_image", url);
+                    set("gallery_images", [...(form.gallery_images || []), url]);
+                  }}
+                  onApplyGallery={(url) => {
+                    if (!form.main_image) set("main_image", url);
+                    set("gallery_images", [...(form.gallery_images || []), url]);
+                  }}
                 />
               </div>
               <div>
