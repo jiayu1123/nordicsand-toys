@@ -1,16 +1,10 @@
 import React from "react";
-
-const categories = [
-  "All",
-  "Beach Bucket Sets",
-  "Sand Molds",
-  "Water Play Toys",
-  "Beach Tools",
-  "Play Sets",
-  "New Arrivals",
-];
+import { useCategories } from "../shared/useCategories";
 
 export default function CategoryFilter({ selected, onSelect }) {
+  const { categories: dynamicCats } = useCategories();
+  const categories = ["All", ...dynamicCats];
+
   return (
     <div className="flex flex-wrap gap-2">
       {categories.map((cat) => (
