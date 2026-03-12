@@ -8,6 +8,7 @@ import { ArrowRight, Factory, ShieldCheck, Palette, Globe, Truck, Award, Leaf, H
 import SectionHeading from "../components/shared/SectionHeading";
 import ProductCard from "../components/products/ProductCard";
 import InquiryButton from "../components/shared/InquiryButton";
+import HeroCarousel from "../components/home/HeroCarousel";
 
 const HERO_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/fc2e5dd77_generated_9233e5b6.png";
 const LIFESTYLE_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/b9045b80b_generated_9bd74fbc.png";
