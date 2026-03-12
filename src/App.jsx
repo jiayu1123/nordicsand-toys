@@ -14,6 +14,7 @@ import OEM from './pages/OEM';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 import News from './pages/News';
+import AdminNews from './pages/AdminNews';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
