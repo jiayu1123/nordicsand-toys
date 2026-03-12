@@ -1,0 +1,25 @@
+/* React Quill rich text editor fixes */
+.story-editor .ql-editor {
+  min-height: 280px;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.story-editor .ql-toolbar {
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.story-editor .ql-container {
+  border: none;
+  font-family: inherit;
+}
+
+/* Quill content display on article page */
+.ql-editor h1 { font-size: 1.75rem; font-weight: 700; margin: 1.2em 0 0.5em; }
+.ql-editor h2 { font-size: 1.4rem; font-weight: 700; margin: 1.1em 0 0.4em; }
+.ql-editor h3 { font-size: 1.15rem; font-weight: 600; margin: 1em 0 0.4em; }
+.ql-editor p { margin: 0.6em 0; }
+.ql-editor ul, .ql-editor ol { padding-left: 1.5em; margin: 0.5em 0; }
+.ql-editor blockquote { border-left: 4px solid #e2e8f0; padding-left: 1em; color: #64748b; margin: 1em 0; }
+.ql-editor img { max-width: 100%; border-radius: 0.75rem; margin: 1em 0; }
