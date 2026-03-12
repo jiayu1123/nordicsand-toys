@@ -46,7 +46,6 @@ export default function AdminStories() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Top Bar */}
       <div className="bg-white border-b border-slate-100 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
@@ -80,7 +79,6 @@ export default function AdminStories() {
           <p className="text-sm text-slate-400 mt-1">Manage company updates, factory news, partnerships, and social impact activities</p>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: "Total Stories", value: articles.length, color: "text-slate-800" },
@@ -95,7 +93,6 @@ export default function AdminStories() {
           ))}
         </div>
 
-        {/* Filters */}
         <div className="bg-white rounded-2xl border border-slate-100 p-4">
           <div className="flex flex-wrap gap-3">
             <div className="relative flex-1 min-w-[200px]">
@@ -113,7 +110,6 @@ export default function AdminStories() {
           </div>
         </div>
 
-        {/* Table */}
         <div className="bg-white rounded-2xl border border-slate-100">
           {isLoading ? (
             <div className="py-20 flex justify-center">
