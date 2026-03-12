@@ -194,18 +194,8 @@ export default function NewsForm({ article, onClose }) {
           {/* Content - Rich Text Editor */}
           <div className="space-y-1.5">
             <Label>Content</Label>
-            <div className="border border-slate-200 rounded-xl overflow-hidden">
-              <ReactQuill
-                theme="snow"
-                value={form.content || ""}
-                onChange={(v) => set("content", v)}
-                modules={QUILL_MODULES}
-                formats={QUILL_FORMATS}
-                style={{ minHeight: "320px" }}
-                className="story-editor"
-              />
-            </div>
-            <p className="text-xs text-slate-400">Supports headings, bold, lists, links and images.</p>
+            <RichTextEditor value={form.content || ""} onChange={(v) => set("content", v)} />
+            <p className="text-xs text-slate-400">Supports headings, bold, italic, lists and links.</p>
           </div>
 
           {/* Featured */}
