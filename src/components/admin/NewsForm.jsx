@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { X, Loader2, RefreshCw } from "lucide-react";
-import ReactQuill from "react-quill";
+import RichTextEditor from "./RichTextEditor";
 import ImageUploader from "./ImageUploader";
 
 const CATEGORIES = ["Company News", "New Collection", "Manufacturing", "Safety", "Trade Shows", "Press"];
