@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -6,14 +6,37 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { X, Loader2 } from "lucide-react";
+import { X, Loader2, RefreshCw } from "lucide-react";
 import ReactQuill from "react-quill";
 import ImageUploader from "./ImageUploader";
 
 const CATEGORIES = ["Company News", "New Collection", "Manufacturing", "Safety", "Trade Shows", "Press"];
 
+const QUILL_MODULES = {
+  toolbar: [
+    [{ header: [1, 2, 3, false] }],
+    ["bold", "italic", "underline", "strike"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["blockquote", "link", "image"],
+    ["clean"],
+  ],
+};
+
+const QUILL_FORMATS = [
+  "header", "bold", "italic", "underline", "strike",
+  "list", "bullet", "blockquote", "link", "image",
+];
+
+function toSlug(title) {
+  return title.toLowerCase().trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 const empty = {
-  title: "", subtitle: "", cover_image: "", gallery_images: [],
+  title: "", slug: "", subtitle: "", excerpt: "", cover_image: "", gallery_images: [],
   content: "", category: "Company News", publish_date: "", author: "",
   tags: [], is_featured: false, status: "draft",
 };
@@ -21,9 +44,18 @@ const empty = {
 export default function NewsForm({ article, onClose }) {
   const [form, setForm] = useState(article || empty);
   const [tagsInput, setTagsInput] = useState((article?.tags || []).join(", "));
+  const [slugManual, setSlugManual] = useState(!!article?.slug);
   const qc = useQueryClient();
 
-  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+  const set = useCallback((k, v) => setForm((f) => ({ ...f, [k]: v })), []);
+
+  const handleTitleChange = (e) => {
+    const title = e.target.value;
+    set("title", title);
+    if (!slugManual) {
+      set("slug", toSlug(title));
+    }
+  };
 
   const mutation = useMutation({
     mutationFn: (data) =>
@@ -42,25 +74,59 @@ export default function NewsForm({ article, onClose }) {
       <div className="flex-1 bg-black/40" onClick={onClose} />
       <div className="w-full max-w-2xl bg-white shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-          <h2 className="font-semibold text-slate-800">{article ? "Edit Article" : "New Article"}</h2>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 shrink-0">
+          <h2 className="font-semibold text-slate-800">{article ? "Edit Story" : "New Story"}</h2>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-700 transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Body */}
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5">
+        <div className="flex-1 overflow-y-auto p-6 space-y-5">
           {/* Title */}
           <div className="space-y-1.5">
             <Label>Title *</Label>
-            <Input value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="Article title" required />
+            <Input value={form.title} onChange={handleTitleChange} placeholder="Article title" required />
+          </div>
+
+          {/* Slug */}
+          <div className="space-y-1.5">
+            <Label className="flex items-center justify-between">
+              <span>URL Slug</span>
+              {slugManual && (
+                <button type="button" onClick={() => { setSlugManual(false); set("slug", toSlug(form.title)); }}
+                  className="text-xs text-sky-600 hover:underline flex items-center gap-1">
+                  <RefreshCw className="w-3 h-3" /> Auto-generate
+                </button>
+              )}
+            </Label>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-400 shrink-0">/stories/</span>
+              <Input
+                value={form.slug}
+                onChange={(e) => { setSlugManual(true); set("slug", e.target.value); }}
+                placeholder="my-article-title"
+                className="font-mono text-sm"
+              />
+            </div>
           </div>
 
           {/* Subtitle */}
           <div className="space-y-1.5">
             <Label>Subtitle</Label>
             <Input value={form.subtitle} onChange={(e) => set("subtitle", e.target.value)} placeholder="Short teaser or subtitle" />
+          </div>
+
+          {/* Excerpt */}
+          <div className="space-y-1.5">
+            <Label>Excerpt <span className="text-slate-400 text-xs">(shown on listing page)</span></Label>
+            <textarea
+              value={form.excerpt}
+              onChange={(e) => set("excerpt", e.target.value)}
+              placeholder="A short summary of this story (2-3 sentences)..."
+              rows={3}
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 resize-none"
+            />
           </div>
 
           {/* Category + Status */}
@@ -125,35 +191,39 @@ export default function NewsForm({ article, onClose }) {
             </div>
           </div>
 
-          {/* Content */}
+          {/* Content - Rich Text Editor */}
           <div className="space-y-1.5">
             <Label>Content</Label>
-            <div className="border border-slate-200 rounded-xl overflow-hidden min-h-[240px]">
+            <div className="border border-slate-200 rounded-xl overflow-hidden">
               <ReactQuill
                 theme="snow"
-                value={form.content}
+                value={form.content || ""}
                 onChange={(v) => set("content", v)}
-                className="h-48"
+                modules={QUILL_MODULES}
+                formats={QUILL_FORMATS}
+                style={{ minHeight: "320px" }}
+                className="story-editor"
               />
             </div>
+            <p className="text-xs text-slate-400">Supports headings, bold, lists, links and images.</p>
           </div>
 
           {/* Featured */}
           <div className="flex items-center justify-between py-2 px-3 bg-slate-50 rounded-xl">
             <div>
-              <p className="text-sm font-medium text-slate-700">Featured Article</p>
-              <p className="text-xs text-slate-400">Pin this article to the top of the news page</p>
+              <p className="text-sm font-medium text-slate-700">Featured Story</p>
+              <p className="text-xs text-slate-400">Pin this story to the top of the Stories page</p>
             </div>
             <Switch checked={!!form.is_featured} onCheckedChange={(v) => set("is_featured", v)} />
           </div>
-        </form>
+        </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-slate-100 flex justify-end gap-3">
+        <div className="px-6 py-4 border-t border-slate-100 flex justify-end gap-3 shrink-0">
           <Button type="button" variant="outline" onClick={onClose} className="rounded-full px-5">Cancel</Button>
           <Button onClick={handleSubmit} disabled={mutation.isPending} className="rounded-full bg-slate-800 hover:bg-slate-700 px-6 gap-2">
             {mutation.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-            {article ? "Save Changes" : "Publish Article"}
+            {article ? "Save Changes" : "Publish Story"}
           </Button>
         </div>
       </div>
