@@ -42,6 +42,9 @@ export default function ProductForm({ product, onClose }) {
   const isEdit = !!product?.id;
   const [form, setForm] = useState(product ? { ...emptyProduct, ...product } : emptyProduct);
   const [newHighlight, setNewHighlight] = useState("");
+  const [newCategory, setNewCategory] = useState("");
+  const [showNewCategory, setShowNewCategory] = useState(false);
+  const { categories, addCategory } = useCategories();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
