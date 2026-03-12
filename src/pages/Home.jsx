@@ -40,46 +40,7 @@ export default function Home() {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img src={HERO_IMG} alt="Beach toys" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/30 to-transparent" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-xl"
-          >
-            <span className="inline-block px-3 py-1 rounded-full bg-sky-100 text-sky-600 text-xs font-semibold uppercase tracking-wider mb-5">
-              Premium Beach Toys Manufacturer
-            </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-800 tracking-tight leading-tight">
-              Where Play Meets{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-cyan-400">
-                the Shore
-              </span>
-            </h1>
-            <p className="mt-5 text-slate-500 text-base md:text-lg leading-relaxed max-w-md">
-              We design and manufacture premium children's beach toys with Nordic-inspired aesthetics. Safe, sustainable, and built for joy.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/Products">
-                <Button className="rounded-full bg-slate-800 hover:bg-slate-700 px-7 py-5 text-sm gap-2">
-                  Explore Products <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-              <Link to="/OEM">
-                <Button variant="outline" className="rounded-full px-7 py-5 text-sm border-slate-300">
-                  OEM / ODM Services
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <HeroCarousel />
 
       {/* Categories */}
       <section className="py-20 bg-white">
