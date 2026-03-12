@@ -69,6 +69,9 @@ export default function Admin() {
               <Link to="/AdminContactSettings">
                 <Button variant="ghost" size="sm" className="rounded-full text-slate-500 text-xs">Contact Settings ↗</Button>
               </Link>
+              <Link to="/AdminAboutSettings">
+                <Button variant="ghost" size="sm" className="rounded-full text-slate-500 text-xs">About Settings ↗</Button>
+              </Link>
             </div>
             <div className="flex items-center gap-2">
               <Link to="/Home">
