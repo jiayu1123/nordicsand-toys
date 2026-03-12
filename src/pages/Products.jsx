@@ -24,7 +24,13 @@ export default function Products() {
   });
 
   const filteredProducts = useMemo(() => {
-    let result = products;
+    // Deduplicate by id first
+    const seen = new Set();
+    let result = products.filter((p) => {
+      if (seen.has(p.id)) return false;
+      seen.add(p.id);
+      return true;
+    });
 
     if (selectedCategory !== "All") {
       if (selectedCategory === "New Arrivals") {
