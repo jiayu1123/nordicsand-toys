@@ -43,8 +43,7 @@ export default function Home() {
       <section className="relative min-h-[85vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img src={HERO_IMG} alt="Beach toys" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/30 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <motion.div
