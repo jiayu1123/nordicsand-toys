@@ -211,7 +211,7 @@ export default function News() {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <SectionHeading badge="Latest News" title="Stories from Shoreplay" subtitle="Updates on new collections, manufacturing insights, and industry news." />
+        <SectionHeading badge="Stories" title="Stories from Shoreplay" subtitle="Company updates, factory news, partnerships, and social impact activities." />
 
         {articles.length === 0 && (
           <div className="mt-24 text-center text-slate-400">
