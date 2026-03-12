@@ -63,7 +63,8 @@ export default function HeroCarousel() {
 
   const slides = useMemo(() => {
     const newsSlides = featuredNews.filter((a) => a.cover_image).map(newsToSlide);
-    return [...newsSlides, ...STATIC_SLIDES];
+    const [firstStatic, ...restStatic] = STATIC_SLIDES;
+    return [firstStatic, ...newsSlides, ...restStatic];
   }, [featuredNews]);
 
   const goTo = useCallback((index, dir = 1) => {
