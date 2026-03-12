@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -16,6 +16,11 @@ function formatDate(d) {
 function stripHtml(html) {
   if (!html) return "";
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function storyLink(article) {
+  if (article.slug) return `/Stories/${article.slug}`;
+  return `/Stories?article=${article.id}`;
 }
 
 function ArticleDetail({ article, related }) {
@@ -54,7 +59,7 @@ function ArticleDetail({ article, related }) {
 
           {article.content ? (
             <div
-              className="prose prose-slate max-w-none prose-img:rounded-2xl prose-headings:font-bold prose-a:text-sky-600"
+              className="prose prose-slate max-w-none prose-img:rounded-2xl prose-headings:font-bold prose-a:text-sky-600 ql-editor"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
           ) : (
@@ -90,7 +95,7 @@ function ArticleDetail({ article, related }) {
             <h2 className="text-lg font-bold text-slate-800 mb-6">Related Stories</h2>
             <div className="grid sm:grid-cols-2 gap-5">
               {related.map((rel) => (
-                <Link key={rel.id} to={`/Stories?article=${rel.id}`} className="group flex gap-4 bg-slate-50 rounded-2xl p-4 hover:bg-sky-50 transition-colors">
+                <Link key={rel.id} to={storyLink(rel)} className="group flex gap-4 bg-slate-50 rounded-2xl p-4 hover:bg-sky-50 transition-colors">
                   {rel.cover_image && (
                     <img src={rel.cover_image} className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
                   )}
@@ -118,7 +123,7 @@ function ArticleDetail({ article, related }) {
 }
 
 function StoryCard({ article, index }) {
-  const excerpt = stripHtml(article.content).slice(0, 120) + (article.content?.length > 120 ? "…" : "");
+  const excerpt = article.excerpt || stripHtml(article.content).slice(0, 140) + (stripHtml(article.content).length > 140 ? "…" : "");
 
   return (
     <motion.div
@@ -127,7 +132,7 @@ function StoryCard({ article, index }) {
       viewport={{ once: true }}
       transition={{ delay: index * 0.07 }}
     >
-      <Link to={`/Stories?article=${article.id}`} className="group block bg-white border border-slate-100 rounded-2xl overflow-hidden hover:shadow-xl hover:border-sky-100 transition-all duration-300 h-full">
+      <Link to={storyLink(article)} className="group block bg-white border border-slate-100 rounded-2xl overflow-hidden hover:shadow-xl hover:border-sky-100 transition-all duration-300 h-full">
         <div className="aspect-[16/10] overflow-hidden bg-slate-50">
           {article.cover_image ? (
             <img src={article.cover_image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -150,7 +155,7 @@ function StoryCard({ article, index }) {
           <h3 className="font-bold text-slate-800 leading-snug mb-2 group-hover:text-sky-600 transition-colors line-clamp-2">
             {article.title}
           </h3>
-          {excerpt && <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">{excerpt}</p>}
+          {excerpt && <p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{excerpt}</p>}
           <div className="mt-4 inline-flex items-center gap-1 text-xs text-sky-600 font-semibold">
             Read story <ArrowRight className="w-3 h-3" />
           </div>
@@ -162,6 +167,7 @@ function StoryCard({ article, index }) {
 
 export default function Stories() {
   const [searchParams] = useSearchParams();
+  const { slug } = useParams();
   const articleId = searchParams.get("article");
 
   const { data: articles = [], isLoading } = useQuery({
@@ -178,8 +184,12 @@ export default function Stories() {
     );
   }
 
-  if (articleId) {
-    const article = articles.find((a) => a.id === articleId);
+  // Resolve article by slug or ?article= id
+  if (slug || articleId) {
+    const article = slug
+      ? articles.find((a) => a.slug === slug)
+      : articles.find((a) => a.id === articleId);
+
     if (!article) return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-slate-400">
         <p className="text-4xl">📭</p>
@@ -210,7 +220,7 @@ export default function Stories() {
           <div className="mt-12 grid md:grid-cols-2 gap-6">
             {featured.slice(0, 2).map((art, i) => (
               <motion.div key={art.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-                <Link to={`/Stories?article=${art.id}`} className="group block relative rounded-3xl overflow-hidden aspect-[4/3] bg-slate-100">
+                <Link to={storyLink(art)} className="group block relative rounded-3xl overflow-hidden aspect-[4/3] bg-slate-100">
                   {art.cover_image && <img src={art.cover_image} alt={art.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 p-6">
