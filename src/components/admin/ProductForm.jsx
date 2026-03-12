@@ -105,6 +105,11 @@ export default function ProductForm({ product, onClose }) {
               <div>
                 <Label className="text-xs text-slate-500 mb-1.5 block">Main Product Image</Label>
                 <ImageUploader value={form.main_image} onChange={(v) => set("main_image", v)} label="main image" />
+                <AIImageProcessor
+                  imageUrl={form.main_image}
+                  onApplyMain={(url) => set("main_image", url)}
+                  onApplyGallery={(url) => set("gallery_images", [...(form.gallery_images || []), url])}
+                />
               </div>
               <div>
                 <Label className="text-xs text-slate-500 mb-1.5 block">Gallery Images</Label>
