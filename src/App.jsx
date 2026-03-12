@@ -13,7 +13,7 @@ import About from './pages/About';
 import OEM from './pages/OEM';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
-import News from './pages/News';
+import Stories from './pages/Stories';
 import AdminStories from './pages/AdminStories';
 
 const AuthenticatedApp = () => {

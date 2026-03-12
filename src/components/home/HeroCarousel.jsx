@@ -39,7 +39,7 @@ function newsToSlide(article) {
     headline: article.title,
     description: article.subtitle || "",
     buttonLabel: "Read the Story",
-    buttonLink: `/News?article=${article.id}`,
+    buttonLink: `/Stories?article=${article.id}`,
     overlay: "from-slate-900/75 via-slate-900/30 to-transparent",
     darkText: true,
   };
