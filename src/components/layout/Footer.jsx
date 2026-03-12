@@ -59,7 +59,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-slate-500">© 2026 Shoreplay. All rights reserved.</p>
+          <p className="text-sm text-slate-500">© 2026 Shoreplay. All rights reserved. · <Link to="/Admin" className="hover:text-slate-300 transition-colors">Admin</Link></p>
           <div className="flex gap-6">
             <span className="text-xs text-slate-500">CE Certified</span>
             <span className="text-xs text-slate-500">EN-71 Compliant</span>
