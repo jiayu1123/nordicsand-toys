@@ -20,6 +20,9 @@ export default function Admin() {
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
 
+  const { categories: dynamicCats } = useCategories();
+  const CATEGORIES = ["All", ...dynamicCats];
+
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["products-admin"],
     queryFn: () => base44.entities.Product.list("-created_date"),
