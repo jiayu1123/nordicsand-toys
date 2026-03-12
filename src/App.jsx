@@ -12,6 +12,7 @@ import ProductDetail from './pages/ProductDetail';
 import About from './pages/About';
 import OEM from './pages/OEM';
 import Contact from './pages/Contact';
+import Admin from './pages/Admin';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
