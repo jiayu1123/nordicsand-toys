@@ -152,12 +152,42 @@ export default function ProductForm({ product, onClose }) {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label className="text-xs text-slate-500">Category *</Label>
-                <Select value={form.category} onValueChange={(v) => set("category", v)}>
-                  <SelectTrigger className="rounded-xl"><SelectValue placeholder="Select category" /></SelectTrigger>
-                  <SelectContent>
-                    {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                  </SelectContent>
-                </Select>
+                {!showNewCategory ? (
+                  <div className="flex gap-2">
+                    <Select value={form.category} onValueChange={(v) => set("category", v)}>
+                      <SelectTrigger className="rounded-xl flex-1"><SelectValue placeholder="Select category" /></SelectTrigger>
+                      <SelectContent>
+                        {categories.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <Button type="button" variant="outline" className="rounded-xl px-3 shrink-0 text-xs gap-1" onClick={() => setShowNewCategory(true)}>
+                      <Plus className="w-3.5 h-3.5" /> New
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <Input
+                      autoFocus
+                      value={newCategory}
+                      onChange={(e) => setNewCategory(e.target.value)}
+                      placeholder="New category name..."
+                      className="rounded-xl flex-1"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") { e.preventDefault();
+                          if (newCategory.trim()) { addCategory(newCategory.trim()); set("category", newCategory.trim()); setNewCategory(""); setShowNewCategory(false); }
+                        }
+                        if (e.key === "Escape") { setShowNewCategory(false); setNewCategory(""); }
+                      }}
+                    />
+                    <Button type="button" className="rounded-xl px-3 shrink-0 bg-slate-800 hover:bg-slate-700 text-xs" onClick={() => {
+                      if (newCategory.trim()) { addCategory(newCategory.trim()); set("category", newCategory.trim()); setNewCategory(""); setShowNewCategory(false); }
+                    }}>Add</Button>
+                    <Button type="button" variant="outline" className="rounded-xl px-3 shrink-0" onClick={() => { setShowNewCategory(false); setNewCategory(""); }}>
+                      <X className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                )}
+                {form.category && <p className="text-xs text-slate-400 mt-1">Selected: <span className="font-medium text-slate-600">{form.category}</span></p>}
               </div>
               <div className="space-y-1.5">
                 <Label className="text-xs text-slate-500">Age Group</Label>
