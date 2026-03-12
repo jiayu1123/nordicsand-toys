@@ -62,7 +62,7 @@ export default function AdminStories() {
               <span className="text-sm font-semibold text-slate-800">Stories Admin</span>
             </div>
             <div className="flex items-center gap-2">
-              <Link to="/News">
+              <Link to="/Stories">
                 <Button variant="ghost" size="sm" className="rounded-full text-slate-500 text-xs">View Stories ↗</Button>
               </Link>
               <Button onClick={openAdd} size="sm" className="rounded-full bg-slate-800 hover:bg-slate-700 gap-1.5 text-xs px-4">
