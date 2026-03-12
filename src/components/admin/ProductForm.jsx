@@ -12,8 +12,21 @@ import { Save, X, Plus } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import ImageUploader from "./ImageUploader";
 
-const CATEGORIES = ["Beach Bucket Sets", "Sand Molds", "Water Play Toys", "Beach Tools", "Play Sets", "New Arrivals"];
+const DEFAULT_CATEGORIES = ["Beach Bucket Sets", "Sand Molds", "Water Play Toys", "Beach Tools", "Play Sets", "New Arrivals"];
 const AGE_GROUPS = ["0-2", "3-4", "5-6", "3-6", "All Ages"];
+
+function useCategories() {
+  const [custom, setCustom] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("sp_custom_categories") || "[]"); } catch { return []; }
+  });
+  const all = [...new Set([...DEFAULT_CATEGORIES, ...custom])];
+  const add = (cat) => {
+    const next = [...new Set([...custom, cat])];
+    setCustom(next);
+    localStorage.setItem("sp_custom_categories", JSON.stringify(next));
+  };
+  return { categories: all, addCategory: add };
+}
 const FEATURE_OPTIONS = ["BPA Free", "CE Certified", "EN-71", "Eco-Friendly", "Non-Toxic", "Recyclable", "ASTM Certified"];
 const STATUSES = ["active", "draft", "archived"];
 
