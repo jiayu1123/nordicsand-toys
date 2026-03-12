@@ -12,20 +12,6 @@ import ImageUploader from "./ImageUploader";
 
 const CATEGORIES = ["Company News", "New Collection", "Manufacturing", "Safety", "Trade Shows", "Press"];
 
-const QUILL_MODULES = {
-  toolbar: [
-    [{ header: [1, 2, 3, false] }],
-    ["bold", "italic", "underline", "strike"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["blockquote", "link", "image"],
-    ["clean"],
-  ],
-};
-
-const QUILL_FORMATS = [
-  "header", "bold", "italic", "underline", "strike",
-  "list", "bullet", "blockquote", "link", "image",
-];
 
 function toSlug(title) {
   return title.toLowerCase().trim()
