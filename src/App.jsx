@@ -14,7 +14,7 @@ import OEM from './pages/OEM';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 import News from './pages/News';
-import AdminNews from './pages/AdminNews';
+import AdminStories from './pages/AdminStories';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -49,7 +49,7 @@ const AuthenticatedApp = () => {
         <Route path="/News" element={<News />} />
       </Route>
       <Route path="/Admin" element={<Admin />} />
-      <Route path="/AdminNews" element={<AdminNews />} />
+      <Route path="/AdminStories" element={<AdminStories />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
