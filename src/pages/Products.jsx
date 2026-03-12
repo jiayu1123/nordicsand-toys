@@ -19,7 +19,10 @@ export default function Products() {
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["products"],
-    queryFn: () => base44.entities.Product.filter({ status: "active" }),
+    queryFn: async () => {
+      const all = await base44.entities.Product.list();
+      return all.filter((p) => !p.status || p.status.toLowerCase() === "active");
+    },
     initialData: [],
   });
 
