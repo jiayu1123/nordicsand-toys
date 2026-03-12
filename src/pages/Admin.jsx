@@ -9,8 +9,8 @@ import { Link } from "react-router-dom";
 import ProductTable from "../components/admin/ProductTable";
 import ProductForm from "../components/admin/ProductForm";
 import AdminStatsBar from "../components/admin/AdminStatsBar";
+import { useCategories } from "../components/shared/useCategories";
 
-const CATEGORIES = ["All", "Beach Bucket Sets", "Sand Molds", "Water Play Toys", "Beach Tools", "Play Sets", "New Arrivals"];
 const STATUSES = ["All", "active", "draft", "archived"];
 
 export default function Admin() {
