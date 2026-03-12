@@ -77,7 +77,7 @@ export default function Contact() {
           <div className="grid lg:grid-cols-5 gap-12">
             {/* Contact Info */}
             <div className="lg:col-span-2 space-y-6">
-              <h3 className="text-lg font-semibold text-slate-800">Get in Touch</h3>
+              <h3 className="text-lg font-semibold text-slate-800">{s.section_title}</h3>
               <div className="space-y-4">
                 {contactInfo.map(({ icon: Icon, label, value, href }) => (
                   <div key={label} className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50">
@@ -99,12 +99,10 @@ export default function Contact() {
               </div>
 
               <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 text-white">
-                <h4 className="font-semibold mb-2">For Wholesale Inquiries</h4>
-                <p className="text-sm text-slate-300 leading-relaxed">
-                  Looking for bulk orders or OEM services? Our dedicated B2B team is ready to assist with custom quotes and flexible terms.
-                </p>
-                <a href="mailto:wholesale@shoreplay.com" className="inline-block mt-3 text-sm text-sky-400 hover:text-sky-300 transition-colors">
-                  wholesale@shoreplay.com →
+                <h4 className="font-semibold mb-2">{s.wholesale_title}</h4>
+                <p className="text-sm text-slate-300 leading-relaxed">{s.wholesale_text}</p>
+                <a href={`mailto:${s.wholesale_email}`} className="inline-block mt-3 text-sm text-sky-400 hover:text-sky-300 transition-colors">
+                  {s.wholesale_email} →
                 </a>
               </div>
             </div>

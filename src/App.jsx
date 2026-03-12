@@ -15,6 +15,7 @@ import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 import Stories from './pages/Stories';
 import AdminStories from './pages/AdminStories';
+import AdminContactSettings from './pages/AdminContactSettings';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
