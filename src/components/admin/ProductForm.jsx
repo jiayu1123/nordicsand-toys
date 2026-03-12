@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Save, X, Plus } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import ImageUploader from "./ImageUploader";
+import AIImageProcessor from "./AIImageProcessor";
 
 const DEFAULT_CATEGORIES = ["Beach Bucket Sets", "Sand Molds", "Water Play Toys", "Beach Tools", "Play Sets", "New Arrivals"];
 const AGE_GROUPS = ["0-2", "3-4", "5-6", "3-6", "All Ages"];
