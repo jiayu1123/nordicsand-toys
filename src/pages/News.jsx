@@ -3,64 +3,86 @@ import { Link, useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Calendar, Tag, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight, Calendar, User, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import SectionHeading from "../components/shared/SectionHeading";
 import { format } from "date-fns";
 
-function ArticleDetail({ article }) {
+// ─── Helpers ────────────────────────────────────────────────
+function formatDate(d) {
+  if (!d) return null;
+  try { return format(new Date(d), "MMMM d, yyyy"); } catch { return null; }
+}
+
+function stripHtml(html) {
+  if (!html) return "";
+  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+// ─── Article Detail ──────────────────────────────────────────
+function ArticleDetail({ article, related }) {
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-        <Link to="/News" className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800 mb-8 transition-colors">
-          <ArrowLeft className="w-4 h-4" /> Back to News
+      {/* Hero cover */}
+      {article.cover_image && (
+        <div className="w-full h-72 md:h-[480px] overflow-hidden">
+          <img src={article.cover_image} alt={article.title} className="w-full h-full object-cover" />
+        </div>
+      )}
+
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+        <Link to="/News" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-8">
+          <ArrowLeft className="w-4 h-4" /> All News
         </Link>
+
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <div className="flex items-center gap-3 mb-4">
-            <span className="inline-flex items-center gap-1 text-xs text-sky-600 font-semibold uppercase tracking-wider">
-              <Tag className="w-3 h-3" /> {article.category}
-            </span>
+          {/* Meta */}
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            <Badge variant="outline" className="rounded-full text-xs text-sky-600 border-sky-200 bg-sky-50">
+              <Tag className="w-3 h-3 mr-1" />{article.category}
+            </Badge>
             {article.publish_date && (
-              <>
-                <span className="text-slate-300">·</span>
-                <span className="inline-flex items-center gap-1 text-xs text-slate-400">
-                  <Calendar className="w-3 h-3" /> {format(new Date(article.publish_date), "MMMM d, yyyy")}
-                </span>
-              </>
+              <span className="inline-flex items-center gap-1 text-xs text-slate-400">
+                <Calendar className="w-3 h-3" /> {formatDate(article.publish_date)}
+              </span>
             )}
             {article.author && (
-              <>
-                <span className="text-slate-300">·</span>
-                <span className="text-xs text-slate-400">{article.author}</span>
-              </>
+              <span className="inline-flex items-center gap-1 text-xs text-slate-400">
+                <User className="w-3 h-3" /> {article.author}
+              </span>
             )}
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-800 tracking-tight mb-2">{article.title}</h1>
-          {article.subtitle && <p className="text-lg text-slate-500 mb-6">{article.subtitle}</p>}
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-800 tracking-tight mb-3">{article.title}</h1>
+          {article.subtitle && <p className="text-lg text-slate-500 leading-relaxed mb-8">{article.subtitle}</p>}
 
-          {article.cover_image && (
-            <img src={article.cover_image} alt={article.title} className="w-full rounded-2xl object-cover aspect-video mb-8 shadow-lg" />
-          )}
-
+          {/* Rich text content */}
           {article.content ? (
-            <div className="prose prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: article.content }} />
+            <div
+              className="prose prose-slate max-w-none prose-img:rounded-2xl prose-headings:font-bold prose-a:text-sky-600"
+              dangerouslySetInnerHTML={{ __html: article.content }}
+            />
           ) : (
             <p className="text-slate-400 italic">No content yet.</p>
           )}
 
+          {/* Gallery */}
           {article.gallery_images?.length > 0 && (
-            <div className="mt-10">
-              <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wider mb-4">Gallery</h3>
+            <div className="mt-12">
+              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Gallery</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {article.gallery_images.map((img, i) => (
-                  <img key={i} src={img} className="rounded-xl object-cover aspect-square" />
+                  <motion.img
+                    key={i} src={img} alt=""
+                    className="rounded-xl object-cover aspect-square w-full hover:opacity-90 transition-opacity cursor-zoom-in"
+                    initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
+                  />
                 ))}
               </div>
             </div>
           )}
 
+          {/* Tags */}
           {article.tags?.length > 0 && (
             <div className="mt-8 flex flex-wrap gap-2">
               {article.tags.map((tag) => (
@@ -68,20 +90,88 @@ function ArticleDetail({ article }) {
               ))}
             </div>
           )}
-
-          <div className="mt-12 pt-8 border-t border-slate-100">
-            <Link to="/Contact">
-              <Button className="rounded-full bg-slate-800 hover:bg-slate-700 text-white gap-2 px-7 py-5 text-sm">
-                Get in Touch <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
-          </div>
         </motion.div>
+
+        {/* Related Articles */}
+        {related.length > 0 && (
+          <div className="mt-16 pt-10 border-t border-slate-100">
+            <h2 className="text-lg font-bold text-slate-800 mb-6">Related Articles</h2>
+            <div className="grid sm:grid-cols-2 gap-5">
+              {related.map((rel) => (
+                <Link key={rel.id} to={`/News?article=${rel.id}`} className="group flex gap-4 bg-slate-50 rounded-2xl p-4 hover:bg-sky-50 transition-colors">
+                  {rel.cover_image && (
+                    <img src={rel.cover_image} className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
+                  )}
+                  <div>
+                    <p className="text-xs text-sky-600 font-semibold mb-1">{rel.category}</p>
+                    <p className="text-sm font-semibold text-slate-800 group-hover:text-sky-700 line-clamp-2 transition-colors">{rel.title}</p>
+                    {rel.publish_date && <p className="text-xs text-slate-400 mt-1">{formatDate(rel.publish_date)}</p>}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="mt-10">
+          <Link to="/News">
+            <span className="inline-flex items-center gap-2 text-sm text-sky-600 font-medium hover:underline">
+              <ArrowLeft className="w-4 h-4" /> Back to all news
+            </span>
+          </Link>
+        </div>
       </div>
     </div>
   );
 }
 
+// ─── News Card ───────────────────────────────────────────────
+function NewsCard({ article, index }) {
+  const excerpt = stripHtml(article.content).slice(0, 120) + (article.content?.length > 120 ? "…" : "");
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.07 }}
+    >
+      <Link to={`/News?article=${article.id}`} className="group block bg-white border border-slate-100 rounded-2xl overflow-hidden hover:shadow-xl hover:border-sky-100 transition-all duration-300 h-full">
+        {/* Cover */}
+        <div className="aspect-[16/10] overflow-hidden bg-slate-50">
+          {article.cover_image ? (
+            <img src={article.cover_image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-4xl">📰</div>
+          )}
+        </div>
+        {/* Body */}
+        <div className="p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-xs font-semibold text-sky-600 uppercase tracking-wider">{article.category}</span>
+            {article.publish_date && (
+              <>
+                <span className="text-slate-200">·</span>
+                <span className="inline-flex items-center gap-1 text-xs text-slate-400">
+                  <Calendar className="w-3 h-3" /> {formatDate(article.publish_date)}
+                </span>
+              </>
+            )}
+          </div>
+          <h3 className="font-bold text-slate-800 leading-snug mb-2 group-hover:text-sky-600 transition-colors line-clamp-2">
+            {article.title}
+          </h3>
+          {excerpt && <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">{excerpt}</p>}
+          <div className="mt-4 inline-flex items-center gap-1 text-xs text-sky-600 font-semibold">
+            Read article <ArrowRight className="w-3 h-3" />
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
+
+// ─── Main Page ───────────────────────────────────────────────
 export default function News() {
   const [searchParams] = useSearchParams();
   const articleId = searchParams.get("article");
@@ -92,8 +182,6 @@ export default function News() {
     initialData: [],
   });
 
-  const article = articleId ? articles.find((a) => a.id === articleId) : null;
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -102,8 +190,21 @@ export default function News() {
     );
   }
 
-  if (article) return <ArticleDetail article={article} />;
+  // Article detail view
+  if (articleId) {
+    const article = articles.find((a) => a.id === articleId);
+    if (!article) return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-slate-400">
+        <p className="text-4xl">📭</p>
+        <p>Article not found.</p>
+        <Link to="/News" className="text-sky-600 text-sm hover:underline">← Back to News</Link>
+      </div>
+    );
+    const related = articles.filter((a) => a.id !== article.id && a.category === article.category).slice(0, 4);
+    return <ArticleDetail article={article} related={related} />;
+  }
 
+  // Grid listing view
   const featured = articles.filter((a) => a.is_featured);
   const rest = articles.filter((a) => !a.is_featured);
 
@@ -113,32 +214,24 @@ export default function News() {
         <SectionHeading badge="Latest News" title="Stories from Shoreplay" subtitle="Updates on new collections, manufacturing insights, and industry news." />
 
         {articles.length === 0 && (
-          <div className="mt-20 text-center text-slate-400">
-            <p className="text-4xl mb-3">📰</p>
-            <p>No articles published yet. Check back soon!</p>
+          <div className="mt-24 text-center text-slate-400">
+            <p className="text-5xl mb-4">📰</p>
+            <p className="text-sm">No articles published yet. Check back soon!</p>
           </div>
         )}
 
-        {/* Featured */}
+        {/* Featured hero cards */}
         {featured.length > 0 && (
-          <div className="mt-12 space-y-4">
-            {featured.map((art) => (
-              <motion.div key={art.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                <Link to={`/News?article=${art.id}`} className="group flex flex-col md:flex-row bg-gradient-to-br from-sky-50 to-cyan-50 rounded-3xl overflow-hidden border border-sky-100 hover:shadow-xl transition-all duration-300">
-                  {art.cover_image && (
-                    <div className="md:w-2/5 aspect-video md:aspect-auto overflow-hidden">
-                      <img src={art.cover_image} alt={art.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    </div>
-                  )}
-                  <div className="flex-1 p-8 flex flex-col justify-center">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                      <span className="text-xs font-semibold text-sky-600 uppercase tracking-wider">{art.category}</span>
-                      {art.publish_date && <span className="text-xs text-slate-400">{format(new Date(art.publish_date), "MMM d, yyyy")}</span>}
-                    </div>
-                    <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-sky-600 transition-colors">{art.title}</h2>
-                    {art.subtitle && <p className="text-slate-500 text-sm leading-relaxed mb-4">{art.subtitle}</p>}
-                    <div className="inline-flex items-center gap-1 text-sm text-sky-600 font-medium">Read more <ArrowRight className="w-4 h-4" /></div>
+          <div className="mt-12 grid md:grid-cols-2 gap-6">
+            {featured.slice(0, 2).map((art, i) => (
+              <motion.div key={art.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
+                <Link to={`/News?article=${art.id}`} className="group block relative rounded-3xl overflow-hidden aspect-[4/3] bg-slate-100">
+                  {art.cover_image && <img src={art.cover_image} alt={art.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 p-6">
+                    <span className="inline-block text-xs font-semibold text-sky-300 uppercase tracking-wider mb-2">{art.category}</span>
+                    <h2 className="text-xl font-bold text-white mb-1 group-hover:text-sky-200 transition-colors line-clamp-2">{art.title}</h2>
+                    {art.publish_date && <p className="text-xs text-white/60">{formatDate(art.publish_date)}</p>}
                   </div>
                 </Link>
               </motion.div>
@@ -146,31 +239,10 @@ export default function News() {
           </div>
         )}
 
-        {/* Grid */}
+        {/* Regular grid */}
         {rest.length > 0 && (
-          <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {rest.map((art, i) => (
-              <motion.div key={art.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}>
-                <Link to={`/News?article=${art.id}`} className="group block bg-white border border-slate-100 rounded-2xl overflow-hidden hover:shadow-lg hover:border-sky-100 transition-all duration-300 h-full">
-                  <div className="aspect-video overflow-hidden bg-slate-50">
-                    {art.cover_image ? (
-                      <img src={art.cover_image} alt={art.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-4xl">📰</div>
-                    )}
-                  </div>
-                  <div className="p-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-xs font-semibold text-sky-600 uppercase tracking-wider">{art.category}</span>
-                      {art.publish_date && <><span className="text-slate-300">·</span><span className="text-xs text-slate-400">{format(new Date(art.publish_date), "MMM d, yyyy")}</span></>}
-                    </div>
-                    <h3 className="font-semibold text-slate-800 text-sm leading-snug mb-2 group-hover:text-sky-600 transition-colors">{art.title}</h3>
-                    {art.subtitle && <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">{art.subtitle}</p>}
-                    <div className="mt-4 flex items-center gap-1 text-xs text-sky-600 font-medium">Read more <ArrowRight className="w-3 h-3" /></div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {rest.map((art, i) => <NewsCard key={art.id} article={art} index={i} />)}
           </div>
         )}
       </div>

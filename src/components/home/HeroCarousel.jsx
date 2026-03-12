@@ -1,38 +1,28 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
 
-const slides = [
+const STATIC_SLIDES = [
   {
-    id: 1,
+    id: "static-1",
     image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/fc2e5dd77_generated_9233e5b6.png",
     badge: "Premium Beach Toys Manufacturer",
     headline: "Where Play Meets the Shore",
-    headlineHighlight: "the Shore",
     description: "We design and manufacture premium children's beach toys with Nordic-inspired aesthetics. Safe, sustainable, and built for joy.",
     buttonLabel: "Explore Products",
     buttonLink: "/Products",
     overlay: "from-white/80 via-white/30 to-transparent",
+    darkText: false,
   },
   {
-    id: 2,
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/b9045b80b_generated_9bd74fbc.png",
-    badge: "New Collection 2026",
-    headline: "Nordic Summer Collection Has Arrived",
-    headlineHighlight: "Has Arrived",
-    description: "Our newest line of beach toys combines Scandinavian design with maximum fun. Explore pastel palettes, sustainable materials, and award-winning shapes.",
-    buttonLabel: "Read the Story",
-    buttonLink: "/News?article=nordic-summer-2026",
-    overlay: "from-white/80 via-white/30 to-transparent",
-  },
-  {
-    id: 3,
+    id: "static-2",
     image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/48b5eddf1_generated_6f1df75d.png",
     badge: "OEM / ODM Services",
     headline: "Build Your Own Beach Toy Brand",
-    headlineHighlight: "Beach Toy Brand",
     description: "Custom logos, colors, packaging, and toy designs. We bring your brand vision to life with flexible MOQ and fast sampling.",
     buttonLabel: "Learn About OEM",
     buttonLink: "/OEM",
@@ -41,9 +31,40 @@ const slides = [
   },
 ];
 
+function newsToSlide(article) {
+  return {
+    id: `news-${article.id}`,
+    image: article.cover_image || "",
+    badge: article.category || "News",
+    headline: article.title,
+    description: article.subtitle || "",
+    buttonLabel: "Read the Story",
+    buttonLink: `/News?article=${article.id}`,
+    overlay: "from-slate-900/75 via-slate-900/30 to-transparent",
+    darkText: true,
+  };
+}
+
+const variants = {
+  enter: (dir) => ({ opacity: 0, x: dir > 0 ? 60 : -60 }),
+  center: { opacity: 1, x: 0 },
+  exit: (dir) => ({ opacity: 0, x: dir > 0 ? -60 : 60 }),
+};
+
 export default function HeroCarousel() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+
+  const { data: featuredNews = [] } = useQuery({
+    queryKey: ["news-featured-hero"],
+    queryFn: () => base44.entities.News.filter({ status: "published", is_featured: true }, "-publish_date", 3),
+    initialData: [],
+  });
+
+  const slides = useMemo(() => {
+    const newsSlides = featuredNews.filter((a) => a.cover_image).map(newsToSlide);
+    return [...newsSlides, ...STATIC_SLIDES];
+  }, [featuredNews]);
 
   const goTo = useCallback((index, dir = 1) => {
     setDirection(dir);
@@ -52,48 +73,47 @@ export default function HeroCarousel() {
 
   const next = useCallback(() => {
     goTo((current + 1) % slides.length, 1);
-  }, [current, goTo]);
+  }, [current, slides.length, goTo]);
 
   const prev = useCallback(() => {
     goTo((current - 1 + slides.length) % slides.length, -1);
-  }, [current, goTo]);
+  }, [current, slides.length, goTo]);
+
+  // Reset current if slides shrink
+  useEffect(() => {
+    if (current >= slides.length) setCurrent(0);
+  }, [slides.length]);
 
   useEffect(() => {
-    const timer = setInterval(next, 5000);
+    const timer = setInterval(next, 5500);
     return () => clearInterval(timer);
   }, [next]);
+
+  if (!slides.length) return null;
 
   const slide = slides[current];
   const textColor = slide.darkText ? "text-white" : "text-slate-800";
   const subColor = slide.darkText ? "text-white/80" : "text-slate-500";
   const badgeBg = slide.darkText ? "bg-white/20 text-white" : "bg-sky-100 text-sky-600";
 
-  const variants = {
-    enter: (dir) => ({ opacity: 0, x: dir > 0 ? 60 : -60 }),
-    center: { opacity: 1, x: 0 },
-    exit: (dir) => ({ opacity: 0, x: dir > 0 ? -60 : 60 }),
-  };
-
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-      {/* Background images */}
+      {/* Background */}
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
-          key={slide.id}
-          custom={direction}
-          variants={{ enter: (d) => ({ opacity: 0 }), center: { opacity: 1 }, exit: (d) => ({ opacity: 0 }) }}
-          initial="enter"
-          animate="center"
-          exit="exit"
+          key={slide.id + "-bg"}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           transition={{ duration: 0.7 }}
           className="absolute inset-0"
         >
-          <img src={slide.image} alt="" className="w-full h-full object-cover" />
+          {slide.image && <img src={slide.image} alt="" className="w-full h-full object-cover" />}
           <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlay}`} />
         </motion.div>
       </AnimatePresence>
 
-      {/* Text content */}
+      {/* Text */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
@@ -110,14 +130,13 @@ export default function HeroCarousel() {
               {slide.badge}
             </span>
             <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight ${textColor}`}>
-              {slide.headline.replace(slide.headlineHighlight, "").trim()}{" "}
-              <span className={slide.darkText ? "text-sky-300" : "text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-cyan-400"}>
-                {slide.headlineHighlight}
-              </span>
+              {slide.headline}
             </h1>
-            <p className={`mt-5 text-base md:text-lg leading-relaxed max-w-md ${subColor}`}>
-              {slide.description}
-            </p>
+            {slide.description && (
+              <p className={`mt-5 text-base md:text-lg leading-relaxed max-w-md ${subColor}`}>
+                {slide.description}
+              </p>
+            )}
             <div className="mt-8">
               <Link to={slide.buttonLink}>
                 <Button className={`rounded-full px-7 py-5 text-sm gap-2 ${slide.darkText ? "bg-white text-slate-800 hover:bg-white/90" : "bg-slate-800 hover:bg-slate-700 text-white"}`}>
@@ -129,21 +148,15 @@ export default function HeroCarousel() {
         </AnimatePresence>
       </div>
 
-      {/* Prev / Next buttons */}
-      <button
-        onClick={prev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md transition-all z-10"
-      >
+      {/* Prev / Next */}
+      <button onClick={prev} className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md transition-all z-10">
         <ChevronLeft className="w-5 h-5 text-slate-700" />
       </button>
-      <button
-        onClick={next}
-        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md transition-all z-10"
-      >
+      <button onClick={next} className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md transition-all z-10">
         <ChevronRight className="w-5 h-5 text-slate-700" />
       </button>
 
-      {/* Dot indicators */}
+      {/* Dots */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
         {slides.map((_, i) => (
           <button
