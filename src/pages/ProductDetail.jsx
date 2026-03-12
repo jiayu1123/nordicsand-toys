@@ -28,7 +28,9 @@ export default function ProductDetail() {
   const { data: relatedProducts = [] } = useQuery({
     queryKey: ["related-products", product?.category],
     queryFn: () =>
-      base44.entities.Product.filter({ category: product.category, status: "active" }, "-sort_order", 5),
+      base44.entities.Product.list("-sort_order", 20).then((all) =>
+        all.filter((p) => p.category === product.category && (!p.status || p.status.toLowerCase() === "active"))
+      ),
     enabled: !!product?.category,
     initialData: [],
   });
