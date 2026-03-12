@@ -31,8 +31,11 @@ export default function AdminContactSettings() {
     queryFn: () => base44.entities.ContactSettings.list(),
   });
 
+  const initialized = useRef(false);
+
   useEffect(() => {
-    if (settings?.length > 0) {
+    if (!initialized.current && settings?.length > 0) {
+      initialized.current = true;
       setForm({ ...DEFAULT, ...settings[0] });
     }
   }, [settings]);
