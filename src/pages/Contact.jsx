@@ -7,11 +7,31 @@ import { Label } from "@/components/ui/label";
 import { Mail, Phone, MapPin, MessageCircle, Clock, Send } from "lucide-react";
 import SectionHeading from "../components/shared/SectionHeading";
 import { useToast } from "@/components/ui/use-toast";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
+
+const DEFAULTS = {
+  section_title: "Get in Touch",
+  email: "info@shoreplay.com",
+  phone: "+86 123 456 7890",
+  whatsapp: "861234567890",
+  address: "Shantou, Guangdong, China 515000",
+  working_hours: "Mon–Fri, 9:00 AM – 6:00 PM (GMT+8)",
+  wholesale_email: "wholesale@shoreplay.com",
+  wholesale_title: "For Wholesale Inquiries",
+  wholesale_text: "Looking for bulk orders or OEM services? Our dedicated B2B team is ready to assist with custom quotes and flexible terms.",
+};
 
 export default function Contact() {
   const { toast } = useToast();
   const urlParams = new URLSearchParams(window.location.search);
   const productRef = urlParams.get("product") || "";
+
+  const { data: settingsArr = [] } = useQuery({
+    queryKey: ["contact-settings"],
+    queryFn: () => base44.entities.ContactSettings.list(),
+  });
+  const s = settingsArr.length > 0 ? { ...DEFAULTS, ...settingsArr[0] } : DEFAULTS;
 
   const [formData, setFormData] = useState({
     name: "", email: "", company: "", phone: "",
@@ -31,11 +51,11 @@ export default function Contact() {
   };
 
   const contactInfo = [
-    { icon: Mail, label: "Email", value: "info@shoreplay.com", href: "mailto:info@shoreplay.com" },
-    { icon: Phone, label: "Phone", value: "+86 123 456 7890", href: "tel:+861234567890" },
-    { icon: MessageCircle, label: "WhatsApp", value: "+86 123 456 7890", href: "https://wa.me/861234567890" },
-    { icon: MapPin, label: "Address", value: "Shantou, Guangdong, China 515000" },
-    { icon: Clock, label: "Working Hours", value: "Mon–Fri, 9:00 AM – 6:00 PM (GMT+8)" },
+    { icon: Mail, label: "Email", value: s.email, href: `mailto:${s.email}` },
+    { icon: Phone, label: "Phone", value: s.phone, href: `tel:${s.phone.replace(/\s/g, "")}` },
+    { icon: MessageCircle, label: "WhatsApp", value: s.phone, href: `https://wa.me/${s.whatsapp}` },
+    { icon: MapPin, label: "Address", value: s.address },
+    { icon: Clock, label: "Working Hours", value: s.working_hours },
   ];
 
   return (
