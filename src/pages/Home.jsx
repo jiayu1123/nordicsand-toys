@@ -9,9 +9,9 @@ import SectionHeading from "../components/shared/SectionHeading";
 import ProductCard from "../components/products/ProductCard";
 import InquiryButton from "../components/shared/InquiryButton";
 
-const HERO_IMG = "/__generating__/img_c3a581c92bdf.png";
-const LIFESTYLE_IMG = "/__generating__/img_be7e44f1b615.png";
-const FACTORY_IMG = "/__generating__/img_235b799278dc.png";
+const HERO_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/fc2e5dd77_generated_9233e5b6.png";
+const LIFESTYLE_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/b9045b80b_generated_9bd74fbc.png";
+const FACTORY_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/48b5eddf1_generated_6f1df75d.png";
 
 const categories = [
   { name: "Beach Bucket Sets", emoji: "🪣", color: "from-sky-100 to-sky-50" },

@@ -9,7 +9,7 @@ import { Palette, Tag, Package, Puzzle, ClipboardCheck, Truck, ArrowRight, Check
 import SectionHeading from "../components/shared/SectionHeading";
 import { useToast } from "@/components/ui/use-toast";
 
-const OEM_IMG = "/__generating__/img_3cddcda779c2.png";
+const OEM_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/087c56c45_generated_c3199ac0.png";
 
 const services = [
   { icon: Tag, title: "Custom Logo", desc: "Print or emboss your brand logo on any product." },

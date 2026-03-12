@@ -4,8 +4,8 @@ import { Factory, Award, Heart, Leaf, ShieldCheck, Globe, Users, Clock } from "l
 import SectionHeading from "../components/shared/SectionHeading";
 import InquiryButton from "../components/shared/InquiryButton";
 
-const FACTORY_IMG = "/__generating__/img_235b799278dc.png";
-const LIFESTYLE_IMG = "/__generating__/img_be7e44f1b615.png";
+const FACTORY_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/48b5eddf1_generated_6f1df75d.png";
+const LIFESTYLE_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/b9045b80b_generated_9bd74fbc.png";
 
 const values = [
   { icon: Heart, title: "Design-First", desc: "Every toy starts with thoughtful, child-centered design inspired by Nordic minimalism." },
