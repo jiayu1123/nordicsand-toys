@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Shell, Mail, Phone, MapPin } from "lucide-react";
+import { useHomeSettings } from "../shared/useHomeSettings";
 
 export default function Footer() {
+  const { cms } = useHomeSettings();
+
   return (
     <footer className="bg-slate-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -14,17 +17,15 @@ export default function Footer() {
               </div>
               <span className="text-xl font-bold tracking-tight">Shoreplay</span>
             </div>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Designing and manufacturing premium children's beach toys with Nordic-inspired aesthetics. Safe, sustainable, and joyful.
-            </p>
+            <p className="text-slate-400 text-sm leading-relaxed">{cms.footer_description}</p>
           </div>
 
           <div>
             <h4 className="font-semibold text-sm uppercase tracking-wider text-slate-300 mb-4">Products</h4>
             <div className="space-y-2.5">
-              {["Beach Bucket Sets", "Sand Molds", "Water Play Toys", "Beach Tools", "Play Sets"].map((cat) => (
-                <Link key={cat} to="/Products" className="block text-sm text-slate-400 hover:text-white transition-colors">
-                  {cat}
+              {(cms.footer_product_links || []).map((item, i) => (
+                <Link key={i} to={item.link || "/Products"} className="block text-sm text-slate-400 hover:text-white transition-colors">
+                  {item.label}
                 </Link>
               ))}
             </div>
@@ -33,37 +34,47 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-sm uppercase tracking-wider text-slate-300 mb-4">Company</h4>
             <div className="space-y-2.5">
-              <Link to="/About" className="block text-sm text-slate-400 hover:text-white transition-colors">About Us</Link>
-              <Link to="/OEM" className="block text-sm text-slate-400 hover:text-white transition-colors">OEM / ODM</Link>
-              <Link to="/Contact" className="block text-sm text-slate-400 hover:text-white transition-colors">Contact</Link>
+              {(cms.footer_company_links || []).map((item, i) => (
+                <Link key={i} to={item.link || "/"} className="block text-sm text-slate-400 hover:text-white transition-colors">
+                  {item.label}
+                </Link>
+              ))}
             </div>
           </div>
 
           <div>
             <h4 className="font-semibold text-sm uppercase tracking-wider text-slate-300 mb-4">Contact Us</h4>
             <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <Mail className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
-                <span className="text-sm text-slate-400">info@shoreplay.com</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <Phone className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
-                <span className="text-sm text-slate-400">+86 123 456 7890</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
-                <span className="text-sm text-slate-400">Shantou, Guangdong, China</span>
-              </div>
+              {cms.footer_email && (
+                <div className="flex items-start gap-3">
+                  <Mail className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
+                  <span className="text-sm text-slate-400">{cms.footer_email}</span>
+                </div>
+              )}
+              {cms.footer_phone && (
+                <div className="flex items-start gap-3">
+                  <Phone className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
+                  <span className="text-sm text-slate-400">{cms.footer_phone}</span>
+                </div>
+              )}
+              {cms.footer_address && (
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
+                  <span className="text-sm text-slate-400">{cms.footer_address}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-slate-500">© 2026 Shoreplay. All rights reserved. · <Link to="/Admin" className="hover:text-slate-300 transition-colors">Admin</Link></p>
+          <p className="text-sm text-slate-500">
+            {cms.footer_copyright} · <Link to="/Admin" className="hover:text-slate-300 transition-colors">Admin</Link>
+          </p>
           <div className="flex gap-6">
-            <span className="text-xs text-slate-500">CE Certified</span>
-            <span className="text-xs text-slate-500">EN-71 Compliant</span>
-            <span className="text-xs text-slate-500">BPA Free</span>
+            {(cms.footer_certifications || []).map((cert, i) => (
+              <span key={i} className="text-xs text-slate-500">{cert}</span>
+            ))}
           </div>
         </div>
       </div>

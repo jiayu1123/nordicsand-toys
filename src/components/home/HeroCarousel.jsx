@@ -5,31 +5,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-
-const STATIC_SLIDES = [
-  {
-    id: "static-1",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/fc2e5dd77_generated_9233e5b6.png",
-    badge: "Premium Beach Toys Manufacturer",
-    headline: "Where Play Meets the Shore",
-    description: "We design and manufacture premium children's beach toys with Nordic-inspired aesthetics. Safe, sustainable, and built for joy.",
-    buttonLabel: "Explore Products",
-    buttonLink: "/Products",
-    overlay: "from-white/80 via-white/30 to-transparent",
-    darkText: false,
-  },
-  {
-    id: "static-2",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/48b5eddf1_generated_6f1df75d.png",
-    badge: "OEM / ODM Services",
-    headline: "Build Your Own Beach Toy Brand",
-    description: "Custom logos, colors, packaging, and toy designs. We bring your brand vision to life with flexible MOQ and fast sampling.",
-    buttonLabel: "Learn About OEM",
-    buttonLink: "/OEM",
-    overlay: "from-slate-900/80 via-slate-900/40 to-transparent",
-    darkText: true,
-  },
-];
+import { useHomeSettings } from "../shared/useHomeSettings";
 
 function newsToSlide(article) {
   return {
@@ -37,11 +13,12 @@ function newsToSlide(article) {
     image: article.cover_image || "",
     badge: article.category || "News",
     headline: article.title,
-    description: article.subtitle || "",
-    buttonLabel: "Read the Story",
-    buttonLink: `/Stories?article=${article.id}`,
-    overlay: "from-slate-900/75 via-slate-900/30 to-transparent",
-    darkText: true,
+    subheadline: article.subtitle || "",
+    button_text: "Read the Story",
+    button_link: `/Stories?article=${article.id}`,
+    dark_text: true,
+    enabled: true,
+    sort_order: 999,
   };
 }
 
@@ -54,6 +31,7 @@ const variants = {
 export default function HeroCarousel() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+  const { cms } = useHomeSettings();
 
   const { data: featuredNews = [] } = useQuery({
     queryKey: ["news-featured-hero"],
@@ -62,25 +40,23 @@ export default function HeroCarousel() {
   });
 
   const slides = useMemo(() => {
+    const cmsSlides = (cms.hero_slides || [])
+      .filter((s) => s.enabled !== false)
+      .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+      .map((s, i) => ({ ...s, id: `cms-${i}` }));
+
     const newsSlides = featuredNews.filter((a) => a.cover_image).map(newsToSlide);
-    const [firstStatic, ...restStatic] = STATIC_SLIDES;
-    return [firstStatic, ...newsSlides, ...restStatic];
-  }, [featuredNews]);
+    return [...cmsSlides, ...newsSlides];
+  }, [cms.hero_slides, featuredNews]);
 
   const goTo = useCallback((index, dir = 1) => {
     setDirection(dir);
     setCurrent(index);
   }, []);
 
-  const next = useCallback(() => {
-    goTo((current + 1) % slides.length, 1);
-  }, [current, slides.length, goTo]);
+  const next = useCallback(() => goTo((current + 1) % slides.length, 1), [current, slides.length, goTo]);
+  const prev = useCallback(() => goTo((current - 1 + slides.length) % slides.length, -1), [current, slides.length, goTo]);
 
-  const prev = useCallback(() => {
-    goTo((current - 1 + slides.length) % slides.length, -1);
-  }, [current, slides.length, goTo]);
-
-  // Reset current if slides shrink
   useEffect(() => {
     if (current >= slides.length) setCurrent(0);
   }, [slides.length]);
@@ -93,13 +69,18 @@ export default function HeroCarousel() {
   if (!slides.length) return null;
 
   const slide = slides[current];
-  const textColor = slide.darkText ? "text-white" : "text-slate-800";
-  const subColor = slide.darkText ? "text-white/80" : "text-slate-500";
-  const badgeBg = slide.darkText ? "bg-white/20 text-white" : "bg-sky-100 text-sky-600";
+  const overlay = slide.dark_text
+    ? "from-slate-900/80 via-slate-900/40 to-transparent"
+    : "from-white/80 via-white/30 to-transparent";
+  const textColor = slide.dark_text ? "text-white" : "text-slate-800";
+  const subColor = slide.dark_text ? "text-white/80" : "text-slate-500";
+  const badgeBg = slide.dark_text ? "bg-white/20 text-white" : "bg-sky-100 text-sky-600";
+  const btnStyle = slide.dark_text
+    ? "bg-white text-slate-800 hover:bg-white/90"
+    : "bg-slate-800 hover:bg-slate-700 text-white";
 
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-      {/* Background */}
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={slide.id + "-bg"}
@@ -110,11 +91,10 @@ export default function HeroCarousel() {
           className="absolute inset-0"
         >
           {slide.image && <img src={slide.image} alt="" className="w-full h-full object-cover" />}
-          <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlay}`} />
+          <div className={`absolute inset-0 bg-gradient-to-r ${overlay}`} />
         </motion.div>
       </AnimatePresence>
 
-      {/* Text */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
@@ -127,29 +107,32 @@ export default function HeroCarousel() {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="max-w-xl"
           >
-            <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-5 ${badgeBg}`}>
-              {slide.badge}
-            </span>
+            {slide.badge && (
+              <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-5 ${badgeBg}`}>
+                {slide.badge}
+              </span>
+            )}
             <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight ${textColor}`}>
               {slide.headline}
             </h1>
-            {slide.description && (
+            {slide.subheadline && (
               <p className={`mt-5 text-base md:text-lg leading-relaxed max-w-md ${subColor}`}>
-                {slide.description}
+                {slide.subheadline}
               </p>
             )}
-            <div className="mt-8">
-              <Link to={slide.buttonLink}>
-                <Button className={`rounded-full px-7 py-5 text-sm gap-2 ${slide.darkText ? "bg-white text-slate-800 hover:bg-white/90" : "bg-slate-800 hover:bg-slate-700 text-white"}`}>
-                  {slide.buttonLabel} <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-            </div>
+            {slide.button_text && (
+              <div className="mt-8">
+                <Link to={slide.button_link || "/"}>
+                  <Button className={`rounded-full px-7 py-5 text-sm gap-2 ${btnStyle}`}>
+                    {slide.button_text} <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              </div>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Prev / Next */}
       <button onClick={prev} className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md transition-all z-10">
         <ChevronLeft className="w-5 h-5 text-slate-700" />
       </button>
@@ -157,7 +140,6 @@ export default function HeroCarousel() {
         <ChevronRight className="w-5 h-5 text-slate-700" />
       </button>
 
-      {/* Dots */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
         {slides.map((_, i) => (
           <button
