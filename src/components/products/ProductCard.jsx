@@ -3,7 +3,12 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 
+function getPrimaryImage(product) {
+  return product.gallery_images?.[0] || product.main_image || null;
+}
+
 export default function ProductCard({ product }) {
+  const primaryImage = getPrimaryImage(product);
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -13,9 +18,9 @@ export default function ProductCard({ product }) {
       <Link to={`/ProductDetail?id=${product.id}`} className="group block">
         <div className="bg-white rounded-2xl overflow-hidden border border-slate-100 hover:border-sky-200 hover:shadow-lg hover:shadow-sky-50 transition-all duration-300">
           <div className="relative aspect-square bg-gradient-to-br from-sky-50 to-cyan-50 overflow-hidden">
-            {product.main_image ? (
+            {primaryImage ? (
               <img
-                src={product.main_image}
+                src={primaryImage}
                 alt={product.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />

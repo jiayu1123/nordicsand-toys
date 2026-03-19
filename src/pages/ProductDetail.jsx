@@ -80,12 +80,8 @@ export default function ProductDetail() {
             transition={{ duration: 0.5 }}
           >
             <ProductGallery
-              mainImage={product.gallery_images?.[0] || product.main_image}
-              galleryImages={
-                product.gallery_images?.length > 0
-                  ? product.gallery_images.slice(1)
-                  : []
-              }
+              mainImage={product.gallery_images?.[0] || product.main_image || ""}
+              galleryImages={product.gallery_images?.length > 1 ? product.gallery_images.slice(1) : []}
             />
           </motion.div>
 
