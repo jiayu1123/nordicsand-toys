@@ -75,7 +75,9 @@ export default function AdminContactSettings() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["contact-settings"] });
-      toast.success("Contact settings updated.", { id: "contact-settings-saved", duration: 3000 });
+      setSaved(true);
+      clearTimeout(savedTimer.current);
+      savedTimer.current = setTimeout(() => setSaved(false), 3000);
     },
   });
 
