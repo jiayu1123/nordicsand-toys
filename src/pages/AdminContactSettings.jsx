@@ -46,7 +46,6 @@ function Field({ label, field, value, onChange, textarea, placeholder }) {
 }
 
 export default function AdminContactSettings() {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
   const [form, setForm] = useState(DEFAULT);
   const initialized = useRef(false);
