@@ -17,7 +17,6 @@ import Stories from './pages/Stories';
 import AdminStories from './pages/AdminStories';
 import AdminContactSettings from './pages/AdminContactSettings';
 import AdminAboutSettings from './pages/AdminAboutSettings';
-import AdminHomeSettings from './pages/AdminHomeSettings';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -56,7 +55,6 @@ const AuthenticatedApp = () => {
       <Route path="/AdminStories" element={<AdminStories />} />
       <Route path="/AdminContactSettings" element={<AdminContactSettings />} />
       <Route path="/AdminAboutSettings" element={<AdminAboutSettings />} />
-      <Route path="/AdminHomeSettings" element={<AdminHomeSettings />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
