@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
-import { Shell, Save, CheckCircle2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Shell, Save, CheckCircle2, LogOut } from "lucide-react";
+import { clearAdminAuthenticated } from "@/lib/adminAuth";
 
 
 const DEFAULT = {
@@ -46,6 +47,8 @@ function Field({ label, field, value, onChange, textarea, placeholder }) {
 }
 
 export default function AdminContactSettings() {
+  const navigate = useNavigate();
+  const handleLogout = () => { clearAdminAuthenticated(); navigate("/Home"); };
   const queryClient = useQueryClient();
   const [form, setForm] = useState(DEFAULT);
   const [saved, setSaved] = useState(false);
@@ -101,6 +104,9 @@ export default function AdminContactSettings() {
             <div className="flex items-center gap-2">
               <Link to="/Admin"><Button variant="ghost" size="sm" className="rounded-full text-xs text-slate-500">Product Admin ↗</Button></Link>
               <Link to="/AdminStories"><Button variant="ghost" size="sm" className="rounded-full text-xs text-slate-500">Stories Admin ↗</Button></Link>
+              <Button variant="ghost" size="sm" onClick={handleLogout} className="rounded-full text-xs text-red-500 hover:text-red-600 hover:bg-red-50 gap-1">
+                <LogOut className="w-3 h-3" /> Logout
+              </Button>
             </div>
           </div>
         </div>
