@@ -15,6 +15,8 @@ import { useCategories } from "../components/shared/useCategories";
 const STATUSES = ["All", "active", "draft", "archived"];
 
 export default function Admin() {
+  const navigate = useNavigate();
+  const handleLogout = () => { clearAdminAuthenticated(); navigate("/Home"); };
   const [editingProduct, setEditingProduct] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState("");
@@ -73,6 +75,12 @@ export default function Admin() {
               <Link to="/AdminAboutSettings">
                 <Button variant="ghost" size="sm" className="rounded-full text-slate-500 text-xs">About Settings ↗</Button>
               </Link>
+              <Link to="/AdminSecuritySettings">
+                <Button variant="ghost" size="sm" className="rounded-full text-slate-500 text-xs">Security ↗</Button>
+              </Link>
+              <Button variant="ghost" size="sm" onClick={handleLogout} className="rounded-full text-xs text-red-500 hover:text-red-600 hover:bg-red-50 gap-1">
+                <LogOut className="w-3 h-3" /> Logout
+              </Button>
             </div>
             <div className="flex items-center gap-2">
               <Link to="/Home">
