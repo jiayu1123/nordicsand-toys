@@ -5,6 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 
 export default function Footer() {
+  const { data: contactList } = useQuery({
+    queryKey: ["contact-settings"],
+    queryFn: () => base44.entities.ContactSettings.list(),
+  });
+  const contact = contactList?.[0] || {};
+
   return (
     <footer className="bg-slate-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
