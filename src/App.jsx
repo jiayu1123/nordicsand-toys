@@ -17,6 +17,9 @@ import Stories from './pages/Stories';
 import AdminStories from './pages/AdminStories';
 import AdminContactSettings from './pages/AdminContactSettings';
 import AdminAboutSettings from './pages/AdminAboutSettings';
+import AdminLogin from './pages/AdminLogin';
+import AdminSecuritySettings from './pages/AdminSecuritySettings';
+import AdminGuard from './components/admin/AdminGuard';
 import ScrollToTop from './components/shared/ScrollToTop';
 
 const AuthenticatedApp = () => {
@@ -54,10 +57,12 @@ const AuthenticatedApp = () => {
         <Route path="/Stories" element={<Stories />} />
         <Route path="/Stories/:slug" element={<Stories />} />
       </Route>
-      <Route path="/Admin" element={<Admin />} />
-      <Route path="/AdminStories" element={<AdminStories />} />
-      <Route path="/AdminContactSettings" element={<AdminContactSettings />} />
-      <Route path="/AdminAboutSettings" element={<AdminAboutSettings />} />
+      <Route path="/AdminLogin" element={<AdminLogin />} />
+      <Route path="/Admin" element={<AdminGuard><Admin /></AdminGuard>} />
+      <Route path="/AdminStories" element={<AdminGuard><AdminStories /></AdminGuard>} />
+      <Route path="/AdminContactSettings" element={<AdminGuard><AdminContactSettings /></AdminGuard>} />
+      <Route path="/AdminAboutSettings" element={<AdminGuard><AdminAboutSettings /></AdminGuard>} />
+      <Route path="/AdminSecuritySettings" element={<AdminGuard><AdminSecuritySettings /></AdminGuard>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </>
