@@ -12,6 +12,7 @@ import { Save, X, Plus } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import ImageUploader from "./ImageUploader";
 import AIImageProcessor from "./AIImageProcessor";
+import GalleryImageEditor from "./GalleryImageEditor";
 import { useCategories } from "../shared/useCategories";
 
 const AGE_GROUPS = ["0-2", "3-4", "5-6", "3-6", "All Ages"];
@@ -106,7 +107,10 @@ export default function ProductForm({ product, onClose }) {
               </div>
               <div>
                 <Label className="text-xs text-slate-500 mb-1.5 block">Gallery Images</Label>
-                <ImageUploader value={form.gallery_images} onChange={(v) => set("gallery_images", v)} multiple />
+                <GalleryImageEditor
+                  images={form.gallery_images || []}
+                  onChange={(v) => set("gallery_images", v)}
+                />
               </div>
             </div>
           </section>
