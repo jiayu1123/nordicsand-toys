@@ -48,7 +48,9 @@ function Field({ label, field, value, onChange, textarea, placeholder }) {
 export default function AdminContactSettings() {
   const queryClient = useQueryClient();
   const [form, setForm] = useState(DEFAULT);
+  const [saved, setSaved] = useState(false);
   const initialized = useRef(false);
+  const savedTimer = useRef(null);
 
   const { data: settings, isLoading } = useQuery({
     queryKey: ["contact-settings"],
