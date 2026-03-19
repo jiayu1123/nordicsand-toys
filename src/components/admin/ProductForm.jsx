@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Save, X, Plus } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import ImageUploader from "./ImageUploader";
 import AIImageProcessor from "./AIImageProcessor";
 import GalleryImageEditor from "./GalleryImageEditor";
@@ -34,7 +34,6 @@ export default function ProductForm({ product, onClose }) {
   const [newCategory, setNewCategory] = useState("");
   const [showNewCategory, setShowNewCategory] = useState(false);
   const { categories, addCategory } = useCategories();
-  const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const set = (key, val) => setForm((f) => ({ ...f, [key]: val }));
@@ -52,8 +51,8 @@ export default function ProductForm({ product, onClose }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products-admin"] });
       queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast({ title: isEdit ? "Product updated!" : "Product created!", description: form.name });
       onClose();
+      toast.success(isEdit ? "Product updated!" : "Product created!", { description: form.name, duration: 3000 });
     },
   });
 

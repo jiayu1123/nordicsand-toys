@@ -79,7 +79,14 @@ export default function ProductDetail() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <ProductGallery mainImage={product.main_image} galleryImages={product.gallery_images} />
+            <ProductGallery
+              mainImage={product.gallery_images?.[0] || product.main_image}
+              galleryImages={
+                product.gallery_images?.length > 0
+                  ? product.gallery_images.slice(1)
+                  : []
+              }
+            />
           </motion.div>
 
           {/* Info */}
