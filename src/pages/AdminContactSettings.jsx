@@ -133,7 +133,13 @@ export default function AdminContactSettings() {
               <Field label="Wholesale Email" field="wholesale_email" value={form.wholesale_email} onChange={handleChange} placeholder="wholesale@shoreplay.com" />
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex items-center justify-end gap-3">
+              {saved && (
+                <span className="flex items-center gap-1.5 text-sm text-green-600 font-medium">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Saved! Contact settings updated.
+                </span>
+              )}
               <Button
                 onClick={() => mutation.mutate(form)}
                 disabled={mutation.isPending}
