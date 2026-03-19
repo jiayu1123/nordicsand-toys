@@ -40,6 +40,8 @@ const AuthenticatedApp = () => {
   }
 
   return (
+    <>
+    <ScrollToTop />
     <Routes>
       <Route path="/" element={<Navigate to="/Home" replace />} />
       <Route element={<PageLayout />}>
@@ -58,6 +60,7 @@ const AuthenticatedApp = () => {
       <Route path="/AdminAboutSettings" element={<AdminAboutSettings />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
+    </>
   );
 };
 
