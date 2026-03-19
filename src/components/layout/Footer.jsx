@@ -50,18 +50,24 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-sm uppercase tracking-wider text-slate-300 mb-4">Contact Us</h4>
             <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <Mail className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
-                <span className="text-sm text-slate-400">info@shoreplay.com</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <Phone className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
-                <span className="text-sm text-slate-400">+86 123 456 7890</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
-                <span className="text-sm text-slate-400">Shantou, Guangdong, China</span>
-              </div>
+              {contact.email && (
+                <div className="flex items-start gap-3">
+                  <Mail className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
+                  <span className="text-sm text-slate-400">{contact.email}</span>
+                </div>
+              )}
+              {contact.phone && (
+                <div className="flex items-start gap-3">
+                  <Phone className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
+                  <span className="text-sm text-slate-400">{contact.phone}</span>
+                </div>
+              )}
+              {contact.address && (
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
+                  <span className="text-sm text-slate-400">{contact.address}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
