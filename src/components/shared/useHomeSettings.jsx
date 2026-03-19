@@ -71,16 +71,20 @@ export const HOME_DEFAULTS = {
   footer_copyright: "© 2026 Shoreplay. All rights reserved.",
 };
 
-const ARRAY_KEYS = ["hero_slides", "categories", "why_cards", "philosophy_badges", "footer_product_links", "footer_company_links", "footer_certifications"];
+// hero_slides is intentionally excluded: an empty array is a valid user choice (no slides configured yet)
+const FALLBACK_ARRAY_KEYS = ["categories", "why_cards", "philosophy_badges", "footer_product_links", "footer_company_links", "footer_certifications"];
 
 export function mergeWithDefaults(raw) {
   if (!raw) return HOME_DEFAULTS;
   const merged = { ...HOME_DEFAULTS, ...raw };
-  ARRAY_KEYS.forEach((key) => {
+  // Only fall back to defaults for non-hero arrays when the saved value is missing/empty
+  FALLBACK_ARRAY_KEYS.forEach((key) => {
     if (!raw[key] || !Array.isArray(raw[key]) || raw[key].length === 0) {
       merged[key] = HOME_DEFAULTS[key];
     }
   });
+  // hero_slides: always use exactly what's in the DB (even if empty)
+  merged.hero_slides = Array.isArray(raw.hero_slides) ? raw.hero_slides : [];
   return merged;
 }
 
