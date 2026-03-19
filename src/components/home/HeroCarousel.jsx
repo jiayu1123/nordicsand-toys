@@ -33,21 +33,24 @@ export default function HeroCarousel() {
   // Build carousel slides from slide config + story data
   const slides = useMemo(() => {
     const slideConfig = cms.hero_slides || [];
+    if (!slideConfig.length) return [];
 
     return slideConfig
-      .filter((s) => s.enabled !== false && s.story_id)          // must be enabled and have a linked story
+      .filter((s) => s.enabled !== false && s.story_id)           // must be enabled and have a linked story
       .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)) // manual order wins
       .map((s) => {
         const story = storyMap[s.story_id];
         if (!story) return null;                                   // story deleted/unpublished → skip
+        // Use slug if available, otherwise fall back to ?article=id (matches Stories page routing)
+        const link = story.slug ? `/Stories/${story.slug}` : `/Stories?article=${story.id}`;
         return {
           id: s.story_id,
           image: story.cover_image || "",
-          headline: story.title,
+          headline: story.title || "",
           subheadline: story.excerpt || story.subtitle || "",
           badge: story.category || "",
           button_text: s.button_text || "Read the Story",
-          button_link: `/Stories/${story.slug || story.id}`,
+          button_link: link,
         };
       })
       .filter(Boolean);
@@ -71,7 +74,29 @@ export default function HeroCarousel() {
     return () => clearInterval(timer);
   }, [next, slides.length]);
 
-  if (!slides.length) return null;
+  // Safe fallback: show a placeholder hero so the page never goes blank
+  if (!slides.length) {
+    return (
+      <section className="relative min-h-[60vh] flex items-center bg-gradient-to-br from-sky-900 via-slate-800 to-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center w-full">
+          <span className="inline-block px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-5">
+            Premium Beach Toys Manufacturer
+          </span>
+          <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-5">
+            Where Play Meets the Shore
+          </h1>
+          <p className="text-white/70 text-lg max-w-xl mx-auto mb-8">
+            We design and manufacture premium children's beach toys with Nordic-inspired aesthetics.
+          </p>
+          <Link to="/Products">
+            <Button className="rounded-full px-7 py-5 text-sm gap-2 bg-white text-slate-800 hover:bg-white/90">
+              Explore Products <ArrowRight className="w-4 h-4" />
+            </Button>
+          </Link>
+        </div>
+      </section>
+    );
+  }
 
   const slide = slides[current];
 
