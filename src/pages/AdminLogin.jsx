@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { hashPassword, setAdminAuthenticated } from "@/lib/adminAuth";
 
-// Default password hash for "admin123" — change via Admin Security Settings
-const DEFAULT_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831d104b1ae37b7e7e85f4";
+// Default password is "admin123" — change via Admin Security Settings
+const DEFAULT_PASSWORD = "admin123";
 
 
 export default function AdminLogin() {
@@ -25,9 +25,12 @@ export default function AdminLogin() {
 
     const inputHash = await hashPassword(password);
 
-    // Try to fetch stored password from DB
+    // Try to fetch stored password from DB; fall back to default
     const records = await base44.entities.AdminPassword.list();
-    let storedHash = records?.[0]?.password_hash || DEFAULT_HASH;
+    let storedHash = records?.[0]?.password_hash;
+    if (!storedHash) {
+      storedHash = await hashPassword(DEFAULT_PASSWORD);
+    }
 
     if (inputHash === storedHash) {
       setAdminAuthenticated();

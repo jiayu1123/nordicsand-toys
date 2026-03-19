@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Shell, Save, CheckCircle2, LogOut, Lock } from "lucide-react";
 import { hashPassword, clearAdminAuthenticated } from "@/lib/adminAuth";
 
-const DEFAULT_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831d104b1ae37b7e7e85f4";
+const DEFAULT_PASSWORD = "admin123";
 
 export default function AdminSecuritySettings() {
   const queryClient = useQueryClient();
@@ -58,7 +58,7 @@ export default function AdminSecuritySettings() {
     }
 
     const currentHash = await hashPassword(currentPassword);
-    const storedHash = records?.[0]?.password_hash || DEFAULT_HASH;
+    const storedHash = records?.[0]?.password_hash || (await hashPassword(DEFAULT_PASSWORD));
     if (currentHash !== storedHash) {
       setError("Current password is incorrect.");
       return;
