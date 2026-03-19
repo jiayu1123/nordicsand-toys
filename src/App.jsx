@@ -17,6 +17,7 @@ import Stories from './pages/Stories';
 import AdminStories from './pages/AdminStories';
 import AdminContactSettings from './pages/AdminContactSettings';
 import AdminAboutSettings from './pages/AdminAboutSettings';
+import ScrollToTop from './components/shared/ScrollToTop';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();

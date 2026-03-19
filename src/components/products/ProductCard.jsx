@@ -7,8 +7,7 @@ export default function ProductCard({ product }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
       <Link to={`/ProductDetail?id=${product.id}`} className="group block">
