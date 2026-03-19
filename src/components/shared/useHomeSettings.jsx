@@ -6,10 +6,7 @@ const LIFESTYLE_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/objec
 const FACTORY_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/48b5eddf1_generated_6f1df75d.png";
 
 export const HOME_DEFAULTS = {
-  hero_slides: [
-    { image: HERO_IMG, badge: "Premium Beach Toys Manufacturer", headline: "Where Play Meets the Shore", subheadline: "We design and manufacture premium children's beach toys with Nordic-inspired aesthetics. Safe, sustainable, and built for joy.", button_text: "Explore Products", button_link: "/Products", dark_text: false, sort_order: 0, enabled: true },
-    { image: FACTORY_IMG, badge: "OEM / ODM Services", headline: "Build Your Own Beach Toy Brand", subheadline: "Custom logos, colors, packaging, and toy designs. We bring your brand vision to life with flexible MOQ and fast sampling.", button_text: "Learn About OEM", button_link: "/OEM", dark_text: true, sort_order: 1, enabled: true },
-  ],
+  hero_slides: [],
   categories_label: "Product Range",
   categories_title: "Explore Our Collections",
   categories_subtitle: "From bucket sets to water play, we create beach toys that inspire imagination and outdoor adventure.",
