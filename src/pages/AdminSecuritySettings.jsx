@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Shell, Save, CheckCircle2, LogOut, Lock } from "lucide-react";
 import { hashPassword, clearAdminAuthenticated } from "@/lib/adminAuth";
 
-const DEFAULT_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831d104b1ae37b7e7e85f";
+const DEFAULT_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831d104b1ae37b7e7e85f4";
 
 export default function AdminSecuritySettings() {
   const queryClient = useQueryClient();
