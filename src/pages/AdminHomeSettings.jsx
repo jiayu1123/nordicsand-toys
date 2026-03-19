@@ -56,13 +56,12 @@ export default function AdminHomeSettings() {
   const [openSection, setOpenSection] = useState("hero");
   const initialized = useRef(false);
 
-  // Initialize form from DB on first load, and re-sync after a successful save
   useEffect(() => {
-    if (!isLoading && (!initialized.current || mutation.isSuccess)) {
+    if (!initialized.current && !isLoading) {
       initialized.current = true;
       setForm(cms);
     }
-  }, [isLoading, cms]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isLoading, cms]);
 
   const toggleSection = (id) => setOpenSection((prev) => (prev === id ? null : id));
 

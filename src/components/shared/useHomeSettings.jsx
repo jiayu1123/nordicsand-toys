@@ -6,7 +6,10 @@ const LIFESTYLE_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/objec
 const FACTORY_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/48b5eddf1_generated_6f1df75d.png";
 
 export const HOME_DEFAULTS = {
-  hero_slides: [],
+  hero_slides: [
+    { image: HERO_IMG, badge: "Premium Beach Toys Manufacturer", headline: "Where Play Meets the Shore", subheadline: "We design and manufacture premium children's beach toys with Nordic-inspired aesthetics. Safe, sustainable, and built for joy.", button_text: "Explore Products", button_link: "/Products", dark_text: false, sort_order: 0, enabled: true },
+    { image: FACTORY_IMG, badge: "OEM / ODM Services", headline: "Build Your Own Beach Toy Brand", subheadline: "Custom logos, colors, packaging, and toy designs. We bring your brand vision to life with flexible MOQ and fast sampling.", button_text: "Learn About OEM", button_link: "/OEM", dark_text: true, sort_order: 1, enabled: true },
+  ],
   categories_label: "Product Range",
   categories_title: "Explore Our Collections",
   categories_subtitle: "From bucket sets to water play, we create beach toys that inspire imagination and outdoor adventure.",
@@ -71,20 +74,16 @@ export const HOME_DEFAULTS = {
   footer_copyright: "© 2026 Shoreplay. All rights reserved.",
 };
 
-// hero_slides is intentionally excluded: an empty array is a valid user choice (no slides configured yet)
-const FALLBACK_ARRAY_KEYS = ["categories", "why_cards", "philosophy_badges", "footer_product_links", "footer_company_links", "footer_certifications"];
+const ARRAY_KEYS = ["hero_slides", "categories", "why_cards", "philosophy_badges", "footer_product_links", "footer_company_links", "footer_certifications"];
 
 export function mergeWithDefaults(raw) {
   if (!raw) return HOME_DEFAULTS;
   const merged = { ...HOME_DEFAULTS, ...raw };
-  // Only fall back to defaults for non-hero arrays when the saved value is missing/empty
-  FALLBACK_ARRAY_KEYS.forEach((key) => {
+  ARRAY_KEYS.forEach((key) => {
     if (!raw[key] || !Array.isArray(raw[key]) || raw[key].length === 0) {
       merged[key] = HOME_DEFAULTS[key];
     }
   });
-  // hero_slides: always use exactly what's in the DB (even if empty)
-  merged.hero_slides = Array.isArray(raw.hero_slides) ? raw.hero_slides : [];
   return merged;
 }
 
