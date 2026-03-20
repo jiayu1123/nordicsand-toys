@@ -45,10 +45,15 @@ function newsToSlide(article) {
   };
 }
 
-const variants = {
-  enter: (dir) => ({ opacity: 0, x: dir > 0 ? 60 : -60 }),
-  center: { opacity: 1, x: 0 },
-  exit: (dir) => ({ opacity: 0, x: dir > 0 ? -60 : 60 }),
+const textVariants = {
+  enter: (dir) => ({ opacity: 0, y: 30, x: dir > 0 ? 20 : -20 }),
+  center: { opacity: 1, y: 0, x: 0 },
+  exit: (dir) => ({ opacity: 0, y: -20, x: dir > 0 ? -20 : 20 }),
+};
+
+const childVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.12, duration: 0.5, ease: "easeOut" } }),
 };
 
 export default function HeroCarousel() {
