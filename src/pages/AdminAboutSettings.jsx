@@ -12,7 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 const DEFAULT = {
   hero_label: "Our Story",
   hero_heading: "Making Beach Days Brighter Since 2009",
-  hero_paragraph: "Shoreplay was born from a simple belief: children's toys should be beautiful, safe, and built to inspire. As a dedicated beach toy manufacturer, we combine Nordic design philosophy with over 15 years of manufacturing expertise to create products that families love.",
+  hero_paragraph: "HXToys was born from a simple belief: children's toys should be beautiful, safe, and built to inspire. As a dedicated beach toy manufacturer, we combine Nordic design philosophy with over 15 years of manufacturing expertise to create products that families love.",
   hero_image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/b9045b80b_generated_9bd74fbc.png",
   stats: [
     { number: "15+", label: "Years Experience" },
@@ -21,7 +21,7 @@ const DEFAULT = {
     { number: "2M+", label: "Toys Produced Yearly" },
   ],
   values_title: "What Drives Us",
-  values_subtitle: "We believe that great products start with great values. Here's what guides every decision at Shoreplay.",
+  values_subtitle: "We believe that great products start with great values. Here's what guides every decision at HXToys.",
   values: [
     { title: "Design-First", desc: "Every toy starts with thoughtful, child-centered design inspired by Nordic minimalism." },
     { title: "Safety Above All", desc: "CE, EN-71, ASTM certified. Only BPA-free, non-toxic, food-grade materials are used." },
@@ -108,7 +108,7 @@ export default function AdminAboutSettings() {
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-sky-400 to-cyan-300 flex items-center justify-center">
                   <Shell className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-sm font-semibold text-slate-700">Shoreplay</span>
+                <span className="text-sm font-semibold text-slate-700">HXToys</span>
               </Link>
               <span className="text-slate-300">/</span>
               <span className="text-sm font-semibold text-slate-800">About Settings</span>
