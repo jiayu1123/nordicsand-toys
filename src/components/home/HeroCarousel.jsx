@@ -59,6 +59,8 @@ const childVariants = {
 export default function HeroCarousel() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [progress, setProgress] = useState(0);
+  const INTERVAL = 5500;
 
   const { data: featuredNews = [] } = useQuery({
     queryKey: ["news-featured-hero"],
