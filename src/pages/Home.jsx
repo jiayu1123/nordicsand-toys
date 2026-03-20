@@ -103,7 +103,7 @@ export default function Home() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
-            badge="Why Shoreplay"
+            badge="Why HXToys"
             title="Your Trusted Beach Toy Partner"
             subtitle="From concept to container, we deliver quality, reliability, and design excellence."
           />
@@ -153,7 +153,7 @@ export default function Home() {
                 Designed for Joy, Built for Safety
               </h2>
               <p className="text-slate-500 leading-relaxed mb-6">
-                Every Shoreplay toy is designed with children's safety and delight in mind. We use only BPA-free, non-toxic materials and meet international safety standards including CE, EN-71, and ASTM.
+                Every HXToys product is designed with children's safety and delight in mind. We use only BPA-free, non-toxic materials and meet international safety standards including CE, EN-71, and ASTM.
               </p>
               <div className="flex flex-wrap gap-3">
                 {[
