@@ -207,14 +207,23 @@ export default function HeroCarousel() {
         <ChevronRight className="w-5 h-5 text-slate-700" />
       </button>
 
-      {/* Dots */}
+      {/* Progress indicators */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => goTo(i, i > current ? 1 : -1)}
-            className={`rounded-full transition-all duration-300 ${i === current ? "w-6 h-2.5 bg-white" : "w-2.5 h-2.5 bg-white/50 hover:bg-white/75"}`}
-          />
+            className="relative overflow-hidden rounded-full h-1 transition-all duration-300"
+            style={{ width: i === current ? 40 : 10 }}
+          >
+            <span className="absolute inset-0 rounded-full bg-white/40" />
+            {i === current && (
+              <span
+                className="absolute inset-y-0 left-0 rounded-full bg-white transition-none"
+                style={{ width: `${progress}%` }}
+              />
+            )}
+          </button>
         ))}
       </div>
     </section>
