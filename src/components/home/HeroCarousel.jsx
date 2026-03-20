@@ -116,17 +116,26 @@ export default function HeroCarousel() {
 
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-      {/* Background */}
+      {/* Background with Ken Burns effect */}
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={slide.id + "-bg"}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.9 }}
           className="absolute inset-0"
         >
-          {slide.image && <img src={slide.image} alt="" className="w-full h-full object-cover" />}
+          {slide.image && (
+            <motion.img
+              src={slide.image}
+              alt=""
+              className="w-full h-full object-cover"
+              initial={{ scale: 1.08 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 6, ease: "easeOut" }}
+            />
+          )}
           <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlay}`} />
         </motion.div>
       </AnimatePresence>
