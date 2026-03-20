@@ -146,31 +146,55 @@ export default function HeroCarousel() {
           <motion.div
             key={slide.id + "-text"}
             custom={direction}
-            variants={variants}
+            variants={textVariants}
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.55, ease: "easeOut" }}
             className="max-w-xl"
           >
-            <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-5 ${badgeBg}`}>
+            <motion.span
+              custom={0}
+              variants={childVariants}
+              initial="hidden"
+              animate="visible"
+              className={`inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-5 ${badgeBg}`}
+            >
               {slide.badge}
-            </span>
-            <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight ${textColor}`}>
+            </motion.span>
+            <motion.h1
+              custom={1}
+              variants={childVariants}
+              initial="hidden"
+              animate="visible"
+              className={`text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight ${textColor}`}
+            >
               {slide.headline}
-            </h1>
+            </motion.h1>
             {slide.description && (
-              <p className={`mt-5 text-base md:text-lg leading-relaxed max-w-md ${subColor}`}>
+              <motion.p
+                custom={2}
+                variants={childVariants}
+                initial="hidden"
+                animate="visible"
+                className={`mt-5 text-base md:text-lg leading-relaxed max-w-md ${subColor}`}
+              >
                 {slide.description}
-              </p>
+              </motion.p>
             )}
-            <div className="mt-8">
+            <motion.div
+              custom={3}
+              variants={childVariants}
+              initial="hidden"
+              animate="visible"
+              className="mt-8"
+            >
               <Link to={slide.buttonLink}>
                 <Button className={`rounded-full px-7 py-5 text-sm gap-2 ${slide.darkText ? "bg-white text-slate-800 hover:bg-white/90" : "bg-slate-800 hover:bg-slate-700 text-white"}`}>
                   {slide.buttonLabel} <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-            </div>
+            </motion.div>
           </motion.div>
         </AnimatePresence>
       </div>
