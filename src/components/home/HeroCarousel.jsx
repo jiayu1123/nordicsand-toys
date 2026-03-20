@@ -93,9 +93,19 @@ export default function HeroCarousel() {
   }, [slides.length]);
 
   useEffect(() => {
-    const timer = setInterval(next, 5500);
-    return () => clearInterval(timer);
-  }, [next]);
+    setProgress(0);
+    const tick = 50;
+    const steps = INTERVAL / tick;
+    let count = 0;
+    const progressTimer = setInterval(() => {
+      count++;
+      setProgress((count / steps) * 100);
+    }, tick);
+    const timer = setTimeout(() => {
+      next();
+    }, INTERVAL);
+    return () => { clearInterval(progressTimer); clearTimeout(timer); };
+  }, [current, next]);
 
   if (!slides.length) return null;
 
