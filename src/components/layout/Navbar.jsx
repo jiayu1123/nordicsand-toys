@@ -26,7 +26,7 @@ export default function Navbar() {
               <Shell className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-bold tracking-tight text-slate-800">
-              Shoreplay
+              HXToys
             </span>
           </Link>
 

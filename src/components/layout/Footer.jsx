@@ -20,7 +20,7 @@ export default function Footer() {
               <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-cyan-300 flex items-center justify-center">
                 <Shell className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold tracking-tight">Shoreplay</span>
+              <span className="text-xl font-bold tracking-tight">HXToys</span>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed">
               Designing and manufacturing premium children's beach toys with Nordic-inspired aesthetics. Safe, sustainable, and joyful.
@@ -73,7 +73,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-slate-500">© 2026 Shoreplay. All rights reserved. · <Link to="/Admin" className="hover:text-slate-300 transition-colors">Admin</Link></p>
+          <p className="text-sm text-slate-500">© 2026 HXToys. All rights reserved. · <Link to="/Admin" className="hover:text-slate-300 transition-colors">Admin</Link></p>
           <div className="flex gap-6">
             <span className="text-xs text-slate-500">CE Certified</span>
             <span className="text-xs text-slate-500">EN-71 Compliant</span>

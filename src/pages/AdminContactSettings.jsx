@@ -96,7 +96,7 @@ export default function AdminContactSettings() {
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-sky-400 to-cyan-300 flex items-center justify-center">
                   <Shell className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-sm font-semibold text-slate-700">Shoreplay</span>
+                <span className="text-sm font-semibold text-slate-700">HXToys</span>
               </Link>
               <span className="text-slate-300">/</span>
               <span className="text-sm font-semibold text-slate-800">Contact Settings</span>
