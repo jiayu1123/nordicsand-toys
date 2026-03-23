@@ -45,7 +45,7 @@ export default function Contact() {
     setSubmitting(true);
     try {
       await base44.integrations.Core.SendEmail({
-        to: "1355162094@qq.com",
+        to: "jiayuzou1123@gmail.com",
         subject: `[HXToys Inquiry] ${formData.subject} — from ${formData.name}`,
         body: `New contact form submission from HXToys website.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || "N/A"}\nCompany: ${formData.company || "N/A"}\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}`,
       });
