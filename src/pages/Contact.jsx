@@ -23,7 +23,7 @@ const DEFAULTS = {
 };
 
 export default function Contact() {
-  const { toast } = useToast();
+
   const urlParams = new URLSearchParams(window.location.search);
   const productRef = urlParams.get("product") || "";
 
