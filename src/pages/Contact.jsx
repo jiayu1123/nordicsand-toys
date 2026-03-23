@@ -44,10 +44,13 @@ export default function Contact() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await base44.integrations.Core.SendEmail({
-        to: "jiayuzou1123@gmail.com",
-        subject: `[HXToys Inquiry] ${formData.subject} — from ${formData.name}`,
-        body: `New contact form submission from HXToys website.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || "N/A"}\nCompany: ${formData.company || "N/A"}\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}`,
+      await base44.functions.invoke('sendContactEmail', {
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
       });
       toast.success("Message Sent! We'll respond within 24 hours.");
       setFormData({ name: "", email: "", company: "", phone: "", subject: "", message: "" });
