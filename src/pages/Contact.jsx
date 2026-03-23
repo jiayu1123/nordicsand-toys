@@ -49,7 +49,7 @@ export default function Contact() {
         subject: `New Contact Form Submission from ${formData.name}`,
         body: `You have a new inquiry from the HXToys website.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || "N/A"}\nCompany: ${formData.company || "N/A"}\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}`,
       });
-      toast({ title: "Message Sent!", description: "We'll respond within 24 hours." });
+      toast.success("Message Sent! We'll respond within 24 hours.");
       setFormData({ name: "", email: "", company: "", phone: "", subject: "", message: "" });
     } catch {
       toast({ title: "Error", description: "Failed to send message. Please try again.", variant: "destructive" });
