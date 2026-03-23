@@ -52,7 +52,7 @@ export default function Contact() {
       toast.success("Message Sent! We'll respond within 24 hours.");
       setFormData({ name: "", email: "", company: "", phone: "", subject: "", message: "" });
     } catch {
-      toast({ title: "Error", description: "Failed to send message. Please try again.", variant: "destructive" });
+      toast.error("Failed to send message. Please try again.");
     } finally {
       setSubmitting(false);
     }
