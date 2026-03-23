@@ -40,14 +40,22 @@ export default function Contact() {
   });
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => {
+    try {
+      await base44.integrations.Core.SendEmail({
+        to: "jiayuzou1123@gmail.com",
+        subject: `New Contact Form Submission from ${formData.name}`,
+        body: `You have a new inquiry from the HXToys website.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || "N/A"}\nCompany: ${formData.company || "N/A"}\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}`,
+      });
       toast({ title: "Message Sent!", description: "We'll respond within 24 hours." });
       setFormData({ name: "", email: "", company: "", phone: "", subject: "", message: "" });
+    } catch {
+      toast({ title: "Error", description: "Failed to send message. Please try again.", variant: "destructive" });
+    } finally {
       setSubmitting(false);
-    }, 1000);
+    }
   };
 
   const contactInfo = [
