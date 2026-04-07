@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 
-const STATIC_SLIDES = [
+const DEFAULT_STATIC_SLIDES = [
   {
     id: "static-1",
     image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/fc2e5dd77_generated_9233e5b6.png",
@@ -68,11 +68,23 @@ export default function HeroCarousel() {
     initialData: [],
   });
 
+  const { data: cmsList = [] } = useQuery({
+    queryKey: ["home-settings"],
+    queryFn: () => base44.entities.HomeSettings.list(),
+    initialData: [],
+  });
+
   const slides = useMemo(() => {
+    const cms = cmsList[0];
+    const staticSlides = (cms?.hero_slides?.length ? cms.hero_slides : DEFAULT_STATIC_SLIDES).map((s, i) => ({
+      ...s,
+      id: `static-${i}`,
+      overlay: s.darkText ? "from-slate-900/80 via-slate-900/40 to-transparent" : "from-white/80 via-white/30 to-transparent",
+    }));
     const newsSlides = featuredNews.filter((a) => a.cover_image).map(newsToSlide);
-    const [firstStatic, ...restStatic] = STATIC_SLIDES;
+    const [firstStatic, ...restStatic] = staticSlides;
     return [firstStatic, ...newsSlides, ...restStatic];
-  }, [featuredNews]);
+  }, [featuredNews, cmsList]);
 
   const goTo = useCallback((index, dir = 1) => {
     setDirection(dir);

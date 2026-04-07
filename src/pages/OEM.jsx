@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,16 +11,14 @@ import { Palette, Tag, Package, Puzzle, ClipboardCheck, Truck, ArrowRight, Check
 import SectionHeading from "../components/shared/SectionHeading";
 import { useToast } from "@/components/ui/use-toast";
 
-const OEM_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/087c56c45_generated_c3199ac0.png";
-
-const services = [
+const DEFAULT_OEM_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/087c56c45_generated_c3199ac0.png";
+const DEFAULT_SERVICES = [
   { icon: Tag, title: "Custom Logo", desc: "Print or emboss your brand logo on any product." },
   { icon: Palette, title: "Custom Colors", desc: "Choose from our Pantone library or specify your own colors." },
   { icon: Package, title: "Custom Packaging", desc: "Design your own retail-ready packaging, mesh bags, or display boxes." },
   { icon: Puzzle, title: "Custom Toy Sets", desc: "Create unique toy combinations and exclusive sets for your market." },
 ];
-
-const processSteps = [
+const DEFAULT_PROCESS = [
   { step: "01", title: "Share Your Brief", desc: "Tell us your product idea, target market, and branding needs." },
   { step: "02", title: "Design & Sampling", desc: "We create product designs and physical samples for your approval." },
   { step: "03", title: "Approval & Order", desc: "Review samples, confirm details, and place your production order." },
@@ -26,9 +26,31 @@ const processSteps = [
   { step: "05", title: "Quality Check", desc: "Final QC inspection before packaging and shipping." },
   { step: "06", title: "Delivery", desc: "On-time shipment via sea, air, or express to your destination." },
 ];
+const DEFAULT_MOQ = [
+  { label: "Minimum Order (Standard)", value: "500 pcs per SKU" },
+  { label: "Minimum Order (Custom)", value: "1,000 pcs per SKU" },
+  { label: "Sample Time", value: "7–15 working days" },
+  { label: "Production Lead Time", value: "30–45 days" },
+  { label: "Payment Terms", value: "T/T, L/C (negotiable)" },
+];
+const SERVICE_ICONS = [Tag, Palette, Package, Puzzle, ClipboardCheck, Truck];
 
 export default function OEM() {
   const { toast } = useToast();
+  const { data: cmsList = [] } = useQuery({
+    queryKey: ["oem-settings"],
+    queryFn: () => base44.entities.OEMSettings.list(),
+    initialData: [],
+  });
+  const cms = cmsList[0] || {};
+  const oemImg = cms.hero_image || DEFAULT_OEM_IMG;
+  const heroBadge = cms.hero_badge || "OEM / ODM Services";
+  const heroHeading = cms.hero_heading || "Build Your Own Beach Toy Brand";
+  const heroText = cms.hero_text || "From custom colors and logos to fully original product designs, we're your complete manufacturing partner. Flexible MOQ, fast sampling, and reliable delivery.";
+  const services = (cms.services?.length ? cms.services : DEFAULT_SERVICES).map((s, i) => ({ ...s, icon: SERVICE_ICONS[i % SERVICE_ICONS.length] }));
+  const processSteps = cms.process_steps?.length ? cms.process_steps : DEFAULT_PROCESS;
+  const moqItems = cms.moq_items?.length ? cms.moq_items : DEFAULT_MOQ;
+
   const [formData, setFormData] = useState({
     company: "", name: "", email: "", phone: "",
     service: "", quantity: "", message: ""
@@ -50,7 +72,7 @@ export default function OEM() {
       {/* Hero */}
       <section className="relative py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={OEM_IMG} alt="OEM Services" className="w-full h-full object-cover" />
+          <img src={oemImg} alt="OEM Services" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/40" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,13 +83,13 @@ export default function OEM() {
             className="max-w-xl"
           >
             <span className="inline-block px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-4">
-              OEM / ODM Services
+              {heroBadge}
             </span>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-5">
-              Build Your Own Beach Toy Brand
+              {heroHeading}
             </h1>
             <p className="text-white/70 leading-relaxed">
-              From custom colors and logos to fully original product designs, we're your complete manufacturing partner. Flexible MOQ, fast sampling, and reliable delivery.
+              {heroText}
             </p>
           </motion.div>
         </div>
@@ -143,13 +165,7 @@ export default function OEM() {
                 </p>
               </div>
               <div className="space-y-4">
-                {[
-                  { label: "Minimum Order (Standard)", value: "500 pcs per SKU" },
-                  { label: "Minimum Order (Custom)", value: "1,000 pcs per SKU" },
-                  { label: "Sample Time", value: "7–15 working days" },
-                  { label: "Production Lead Time", value: "30–45 days" },
-                  { label: "Payment Terms", value: "T/T, L/C (negotiable)" },
-                ].map(({ label, value }) => (
+                {moqItems.map(({ label, value }) => (
                   <div key={label} className="flex items-center justify-between py-3 border-b border-slate-700">
                     <span className="text-sm text-slate-400">{label}</span>
                     <span className="text-sm font-medium text-white">{value}</span>
