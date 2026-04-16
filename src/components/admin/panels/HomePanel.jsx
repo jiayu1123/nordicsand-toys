@@ -20,16 +20,10 @@ const DEFAULT = {
       buttonLink: "/Products",
       darkText: false,
     },
-    {
-      image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/48b5eddf1_generated_6f1df75d.png",
-      badge: "OEM / ODM Services",
-      headline: "Build Your Own Beach Toy Brand",
-      description: "Custom logos, colors, packaging, and toy designs. We bring your brand vision to life with flexible MOQ and fast sampling.",
-      buttonLabel: "Learn About OEM",
-      buttonLink: "/OEM",
-      darkText: true,
-    },
   ],
+  hero_include_stories: true,
+  hero_include_about: false,
+  hero_include_oem: false,
   philosophy_badge: "Our Philosophy",
   philosophy_heading: "Designed for Joy, Built for Safety",
   philosophy_text: "Every HXToys product is designed with children's safety and delight in mind. We use only BPA-free, non-toxic materials and meet international safety standards including CE, EN-71, and ASTM.",
@@ -110,8 +104,26 @@ export default function HomePanel() {
 
       {/* Hero Slides */}
       <section className="bg-white rounded-2xl border border-slate-100 p-6 space-y-4">
+        <div>
+          <h3 className="font-semibold text-slate-700 mb-4">Hero Carousel</h3>
+          <div className="bg-slate-50 rounded-xl p-4 space-y-3 mb-4 border border-slate-200">
+            <div className="text-sm font-semibold text-slate-600 mb-2">Include sections:</div>
+            <label className="flex items-center gap-2 cursor-pointer text-sm">
+              <input type="checkbox" checked={data.hero_include_stories} onChange={(e) => set("hero_include_stories", e.target.checked)} className="w-4 h-4" />
+              <span>Featured Blog Stories</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer text-sm">
+              <input type="checkbox" checked={data.hero_include_about} onChange={(e) => set("hero_include_about", e.target.checked)} className="w-4 h-4" />
+              <span>About Us Slide</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer text-sm">
+              <input type="checkbox" checked={data.hero_include_oem} onChange={(e) => set("hero_include_oem", e.target.checked)} className="w-4 h-4" />
+              <span>OEM/ODM Services Slide</span>
+            </label>
+          </div>
+        </div>
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-slate-700">Hero Carousel Slides</h3>
+          <h4 className="font-semibold text-slate-700">Custom Slides</h4>
           <Button onClick={addSlide} size="sm" variant="outline" className="rounded-full gap-1 text-xs"><Plus className="w-3.5 h-3.5" />Add Slide</Button>
         </div>
         {data.hero_slides.map((slide, i) => (

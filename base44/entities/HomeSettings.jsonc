@@ -32,6 +32,21 @@
         }
       }
     },
+    "hero_include_stories": {
+      "type": "boolean",
+      "default": true,
+      "description": "Include featured blog stories in hero carousel"
+    },
+    "hero_include_about": {
+      "type": "boolean",
+      "default": false,
+      "description": "Include About Us slide in hero carousel"
+    },
+    "hero_include_oem": {
+      "type": "boolean",
+      "default": false,
+      "description": "Include OEM/ODM services slide in hero carousel"
+    },
     "philosophy_badge": {
       "type": "string",
       "description": "Badge above philosophy heading"

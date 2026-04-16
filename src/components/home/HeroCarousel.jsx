@@ -75,15 +75,52 @@ export default function HeroCarousel() {
   });
 
   const slides = useMemo(() => {
-    const cms = cmsList[0];
-    const staticSlides = (cms?.hero_slides?.length ? cms.hero_slides : DEFAULT_STATIC_SLIDES).map((s, i) => ({
+    const cms = cmsList[0] || {};
+    const customSlides = (cms?.hero_slides?.length ? cms.hero_slides : DEFAULT_STATIC_SLIDES).map((s, i) => ({
       ...s,
-      id: `static-${i}`,
+      id: `custom-${i}`,
       overlay: s.darkText ? "from-slate-900/80 via-slate-900/40 to-transparent" : "from-white/80 via-white/30 to-transparent",
     }));
-    const newsSlides = featuredNews.filter((a) => a.cover_image).map(newsToSlide);
-    const [firstStatic, ...restStatic] = staticSlides;
-    return [firstStatic, ...newsSlides, ...restStatic];
+
+    const result = [];
+    if (customSlides.length > 0) result.push(customSlides[0]);
+
+    if (cms?.hero_include_stories) {
+      const newsSlides = featuredNews.filter((a) => a.cover_image).map(newsToSlide);
+      result.push(...newsSlides);
+    }
+
+    if (cms?.hero_include_about) {
+      result.push({
+        id: "about-slide",
+        image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/b9045b80b_generated_9bd74fbc.png",
+        badge: "About Us",
+        headline: "Designed for Joy, Built for Safety",
+        description: "Every product is designed with children's safety and delight in mind. We use BPA-free, non-toxic materials and meet international safety standards.",
+        buttonLabel: "Learn Our Story",
+        buttonLink: "/About",
+        overlay: "from-slate-900/80 via-slate-900/40 to-transparent",
+        darkText: true,
+      });
+    }
+
+    if (cms?.hero_include_oem) {
+      result.push({
+        id: "oem-slide",
+        image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/48b5eddf1_generated_6f1df75d.png",
+        badge: "OEM / ODM Services",
+        headline: "Build Your Own Beach Toy Brand",
+        description: "Custom logos, colors, packaging, and designs. Flexible MOQ and fast sampling.",
+        buttonLabel: "Learn About OEM",
+        buttonLink: "/OEM",
+        overlay: "from-slate-900/80 via-slate-900/40 to-transparent",
+        darkText: true,
+      });
+    }
+
+    if (customSlides.length > 1) result.push(...customSlides.slice(1));
+
+    return result.length > 0 ? result : [DEFAULT_STATIC_SLIDES[0]];
   }, [featuredNews, cmsList]);
 
   const goTo = useCallback((index, dir = 1) => {
