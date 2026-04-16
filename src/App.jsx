@@ -46,9 +46,8 @@ const AuthenticatedApp = () => {
     <>
     <ScrollToTop />
     <Routes>
-      <Route path="/" element={<Navigate to="/Home" replace />} />
       <Route element={<PageLayout />}>
-        <Route path="/Home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/Products" element={<Products />} />
         <Route path="/ProductDetail" element={<ProductDetail />} />
         <Route path="/About" element={<About />} />
