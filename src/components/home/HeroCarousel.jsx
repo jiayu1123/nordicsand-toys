@@ -92,12 +92,16 @@ export default function HeroCarousel() {
   }, []);
 
   const next = useCallback(() => {
-    goTo((current + 1) % slides.length, 1);
-  }, [current, slides.length, goTo]);
+    if (slides.length === 0) return;
+    setCurrent((prev) => (prev + 1) % slides.length);
+    setDirection(1);
+  }, [slides.length]);
 
   const prev = useCallback(() => {
-    goTo((current - 1 + slides.length) % slides.length, -1);
-  }, [current, slides.length, goTo]);
+    if (slides.length === 0) return;
+    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+    setDirection(-1);
+  }, [slides.length]);
 
   // Reset current if slides shrink
   useEffect(() => {
@@ -105,6 +109,7 @@ export default function HeroCarousel() {
   }, [slides.length]);
 
   useEffect(() => {
+    if (slides.length === 0) return;
     setProgress(0);
     const tick = 50;
     const steps = INTERVAL / tick;
@@ -117,7 +122,7 @@ export default function HeroCarousel() {
       next();
     }, INTERVAL);
     return () => { clearInterval(progressTimer); clearTimeout(timer); };
-  }, [current, next]);
+  }, [current, next, slides.length]);
 
   if (!slides.length) return null;
 
