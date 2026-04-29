@@ -22,9 +22,11 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link to="/Home" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-cyan-300 flex items-center justify-center">
-              <Shell className="w-5 h-5 text-white" />
-            </div>
+            <img
+              src="https://media.base44.com/images/public/69b31b1a5577543294a65bde/65387f559_hongxing_logo_transparent.png"
+              alt="HXToys Logo"
+              className="h-10 w-10 object-contain"
+            />
             <span className="text-xl font-bold tracking-tight text-slate-800">
               HXToys
             </span>
