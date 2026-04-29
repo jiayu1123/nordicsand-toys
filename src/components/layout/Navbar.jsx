@@ -23,7 +23,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link to="/" className="flex items-center gap-2.5">
             <img
-              src="https://media.base44.com/images/public/69b31b1a5577543294a65bde/25f17790c_ChatGPTImageApr29202603_00_59AM.png"
+              src="https://media.base44.com/images/public/69b31b1a5577543294a65bde/ce946aab3_hongxing_logo_transparent.png"
               alt="HXToys Logo"
               className="w-14 h-14 object-contain"
             />
