@@ -146,7 +146,7 @@ export default function HeroCarousel() {
   }, [slides.length]);
 
   useEffect(() => {
-    if (slides.length === 0) return;
+    if (slides.length <= 1) return;
     setProgress(0);
     const tick = 50;
     const steps = INTERVAL / tick;
