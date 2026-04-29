@@ -25,7 +25,7 @@ export default function Navbar() {
             <img
               src="https://media.base44.com/images/public/69b31b1a5577543294a65bde/65387f559_hongxing_logo_transparent.png"
               alt="HXToys Logo"
-              className="h-10 w-10 object-contain"
+              className="h-14 w-14 object-contain"
             />
             <span className="text-xl font-bold tracking-tight text-slate-800">
               HXToys
