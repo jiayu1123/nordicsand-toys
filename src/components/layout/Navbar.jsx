@@ -25,7 +25,7 @@ export default function Navbar() {
             <img
               src="https://media.base44.com/images/public/69b31b1a5577543294a65bde/25f17790c_ChatGPTImageApr29202603_00_59AM.png"
               alt="HXToys Logo"
-              className="w-10 h-10 object-contain"
+              className="w-14 h-14 object-contain"
             />
             <span className="text-xl font-bold tracking-tight text-slate-800">
               HXToys
