@@ -10,10 +10,9 @@ import ProductCard from "../components/products/ProductCard";
 import InquiryButton from "../components/shared/InquiryButton";
 import HeroCarousel from "../components/home/HeroCarousel";
 
-const DEFAULT_LIFESTYLE_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/b9045b80b_generated_9bd74fbc.png";
-const DEFAULT_FACTORY_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/48b5eddf1_generated_6f1df75d.png";
-
-const ICON_MAP = [Factory, Palette, ShieldCheck, Globe, Truck, Award];
+const HERO_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/fc2e5dd77_generated_9233e5b6.png";
+const LIFESTYLE_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/b9045b80b_generated_9bd74fbc.png";
+const FACTORY_IMG = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/48b5eddf1_generated_6f1df75d.png";
 
 const categories = [
   { name: "Beach Bucket Sets", emoji: "🪣", color: "from-sky-100 to-sky-50" },
@@ -23,13 +22,13 @@ const categories = [
   { name: "Play Sets", emoji: "🎪", color: "from-rose-100 to-rose-50" },
 ];
 
-const DEFAULT_WHY = [
-  { title: "Own Factory", desc: "Full control over production, quality, and lead times" },
-  { title: "Custom Design", desc: "OEM/ODM services with custom colors, logos, and packaging" },
-  { title: "Safety Certified", desc: "CE, EN-71, ASTM, and BPA-free materials" },
-  { title: "Global Export", desc: "Shipping to 50+ countries with export expertise" },
-  { title: "Flexible MOQ", desc: "Competitive minimum orders for retailers and distributors" },
-  { title: "15+ Years", desc: "Experienced manufacturer with proven track record" },
+const whyChooseUs = [
+  { icon: Factory, title: "Own Factory", desc: "Full control over production, quality, and lead times" },
+  { icon: Palette, title: "Custom Design", desc: "OEM/ODM services with custom colors, logos, and packaging" },
+  { icon: ShieldCheck, title: "Safety Certified", desc: "CE, EN-71, ASTM, and BPA-free materials" },
+  { icon: Globe, title: "Global Export", desc: "Shipping to 50+ countries with export expertise" },
+  { icon: Truck, title: "Flexible MOQ", desc: "Competitive minimum orders for retailers and distributors" },
+  { icon: Award, title: "15+ Years", desc: "Experienced manufacturer with proven track record" },
 ];
 
 export default function Home() {
@@ -38,22 +37,6 @@ export default function Home() {
     queryFn: () => base44.entities.Product.filter({ is_featured: true, status: "active" }, "-sort_order", 8),
     initialData: [],
   });
-
-  const { data: cmsList = [] } = useQuery({
-    queryKey: ["home-settings"],
-    queryFn: () => base44.entities.HomeSettings.list(),
-    initialData: [],
-  });
-  const cms = cmsList[0] || {};
-
-  const lifestyleImg = cms.philosophy_image || DEFAULT_LIFESTYLE_IMG;
-  const factoryImg = cms.factory_image || DEFAULT_FACTORY_IMG;
-  const philosophyBadge = cms.philosophy_badge || "Our Philosophy";
-  const philosophyHeading = cms.philosophy_heading || "Designed for Joy, Built for Safety";
-  const philosophyText = cms.philosophy_text || "Every HXToys product is designed with children's safety and delight in mind. We use only BPA-free, non-toxic materials and meet international safety standards including CE, EN-71, and ASTM.";
-  const oemHeading = cms.oem_heading || "Create Your Own Beach Toy Brand";
-  const oemText = cms.oem_text || "Custom logos, colors, packaging, and toy designs. We bring your brand vision to life with flexible MOQ and fast sampling.";
-  const whyItems = cms.why_items?.length ? cms.why_items : DEFAULT_WHY;
 
   return (
     <div>
@@ -125,25 +108,22 @@ export default function Home() {
             subtitle="From concept to container, we deliver quality, reliability, and design excellence."
           />
           <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {whyItems.map(({ title, desc }, i) => {
-              const Icon = ICON_MAP[i % ICON_MAP.length];
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.4 }}
-                  className="bg-slate-50 rounded-2xl p-6 hover:shadow-md transition-shadow"
-                >
-                  <div className="w-11 h-11 rounded-xl bg-sky-100 flex items-center justify-center mb-4">
-                    <Icon className="w-5 h-5 text-sky-600" />
-                  </div>
-                  <h3 className="font-semibold text-slate-800 mb-1.5">{title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
-                </motion.div>
-              );
-            })}
+            {whyChooseUs.map(({ icon: Icon, title, desc }, i) => (
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.4 }}
+                className="bg-slate-50 rounded-2xl p-6 hover:shadow-md transition-shadow"
+              >
+                <div className="w-11 h-11 rounded-xl bg-sky-100 flex items-center justify-center mb-4">
+                  <Icon className="w-5 h-5 text-sky-600" />
+                </div>
+                <h3 className="font-semibold text-slate-800 mb-1.5">{title}</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -158,7 +138,7 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <img src={lifestyleImg} alt="Children playing" className="rounded-3xl shadow-2xl shadow-sky-100" />
+              <img src={LIFESTYLE_IMG} alt="Children playing" className="rounded-3xl shadow-2xl shadow-sky-100" />
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
@@ -167,13 +147,13 @@ export default function Home() {
               transition={{ duration: 0.6 }}
             >
               <span className="inline-block px-3 py-1 rounded-full bg-white text-sky-600 text-xs font-semibold uppercase tracking-wider mb-4">
-                {philosophyBadge}
+                Our Philosophy
               </span>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-800 tracking-tight mb-5">
-                {philosophyHeading}
+                Designed for Joy, Built for Safety
               </h2>
               <p className="text-slate-500 leading-relaxed mb-6">
-                {philosophyText}
+                Every HXToys product is designed with children's safety and delight in mind. We use only BPA-free, non-toxic materials and meet international safety standards including CE, EN-71, and ASTM.
               </p>
               <div className="flex flex-wrap gap-3">
                 {[
@@ -196,7 +176,7 @@ export default function Home() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden">
-            <img src={factoryImg} alt="Our factory" className="w-full h-80 md:h-96 object-cover" />
+            <img src={FACTORY_IMG} alt="Our factory" className="w-full h-80 md:h-96 object-cover" />
             <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/40" />
             <div className="absolute inset-0 flex items-center">
               <div className="px-8 md:px-12 max-w-lg">
@@ -204,10 +184,10 @@ export default function Home() {
                   OEM / ODM Services
                 </span>
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                  {oemHeading}
+                  Create Your Own Beach Toy Brand
                 </h2>
                 <p className="text-white/70 text-sm leading-relaxed mb-6">
-                  {oemText}
+                  Custom logos, colors, packaging, and toy designs. We bring your brand vision to life with flexible MOQ and fast sampling.
                 </p>
                 <Link to="/OEM">
                   <Button className="rounded-full bg-white text-slate-800 hover:bg-white/90 px-7 py-5 text-sm gap-2">

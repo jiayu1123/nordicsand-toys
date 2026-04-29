@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 
-const DEFAULT_STATIC_SLIDES = [
+const STATIC_SLIDES = [
   {
     id: "static-1",
     image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/fc2e5dd77_generated_9233e5b6.png",
@@ -68,60 +68,11 @@ export default function HeroCarousel() {
     initialData: [],
   });
 
-  const { data: cmsList = [] } = useQuery({
-    queryKey: ["home-settings"],
-    queryFn: () => base44.entities.HomeSettings.list(),
-    initialData: [],
-  });
-
   const slides = useMemo(() => {
-    const cms = cmsList[0] || {};
-    const customSlides = (cms?.hero_slides?.length ? cms.hero_slides : DEFAULT_STATIC_SLIDES).map((s, i) => ({
-      ...s,
-      id: `custom-${i}`,
-      overlay: s.darkText ? "from-slate-900/80 via-slate-900/40 to-transparent" : "from-white/80 via-white/30 to-transparent",
-    }));
-
-    const result = [];
-    if (customSlides.length > 0) result.push(customSlides[0]);
-
-    if (cms?.hero_include_stories) {
-      const newsSlides = featuredNews.filter((a) => a.cover_image).map(newsToSlide);
-      result.push(...newsSlides);
-    }
-
-    if (cms?.hero_include_about) {
-      result.push({
-        id: "about-slide",
-        image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/b9045b80b_generated_9bd74fbc.png",
-        badge: "About Us",
-        headline: "Designed for Joy, Built for Safety",
-        description: "Every product is designed with children's safety and delight in mind. We use BPA-free, non-toxic materials and meet international safety standards.",
-        buttonLabel: "Learn Our Story",
-        buttonLink: "/About",
-        overlay: "from-slate-900/80 via-slate-900/40 to-transparent",
-        darkText: true,
-      });
-    }
-
-    if (cms?.hero_include_oem) {
-      result.push({
-        id: "oem-slide",
-        image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69b31b1a5577543294a65bde/48b5eddf1_generated_6f1df75d.png",
-        badge: "OEM / ODM Services",
-        headline: "Build Your Own Beach Toy Brand",
-        description: "Custom logos, colors, packaging, and designs. Flexible MOQ and fast sampling.",
-        buttonLabel: "Learn About OEM",
-        buttonLink: "/OEM",
-        overlay: "from-slate-900/80 via-slate-900/40 to-transparent",
-        darkText: true,
-      });
-    }
-
-    if (customSlides.length > 1) result.push(...customSlides.slice(1));
-
-    return result.length > 0 ? result : [DEFAULT_STATIC_SLIDES[0]];
-  }, [featuredNews, cmsList]);
+    const newsSlides = featuredNews.filter((a) => a.cover_image).map(newsToSlide);
+    const [firstStatic, ...restStatic] = STATIC_SLIDES;
+    return [firstStatic, ...newsSlides, ...restStatic];
+  }, [featuredNews]);
 
   const goTo = useCallback((index, dir = 1) => {
     setDirection(dir);
@@ -129,16 +80,12 @@ export default function HeroCarousel() {
   }, []);
 
   const next = useCallback(() => {
-    if (slides.length === 0) return;
-    setCurrent((prev) => (prev + 1) % slides.length);
-    setDirection(1);
-  }, [slides.length]);
+    goTo((current + 1) % slides.length, 1);
+  }, [current, slides.length, goTo]);
 
   const prev = useCallback(() => {
-    if (slides.length === 0) return;
-    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
-    setDirection(-1);
-  }, [slides.length]);
+    goTo((current - 1 + slides.length) % slides.length, -1);
+  }, [current, slides.length, goTo]);
 
   // Reset current if slides shrink
   useEffect(() => {
@@ -146,7 +93,6 @@ export default function HeroCarousel() {
   }, [slides.length]);
 
   useEffect(() => {
-    if (slides.length <= 1) return;
     setProgress(0);
     const tick = 50;
     const steps = INTERVAL / tick;
@@ -159,7 +105,7 @@ export default function HeroCarousel() {
       next();
     }, INTERVAL);
     return () => { clearInterval(progressTimer); clearTimeout(timer); };
-  }, [current, next, slides.length]);
+  }, [current, next]);
 
   if (!slides.length) return null;
 

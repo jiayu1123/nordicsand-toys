@@ -7,7 +7,6 @@ import { ArrowLeft, ArrowRight, Calendar, User, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import SectionHeading from "../components/shared/SectionHeading";
 import { format } from "date-fns";
-import useSEO from "../hooks/useSEO";
 
 function formatDate(d) {
   if (!d) return null;
@@ -20,39 +19,11 @@ function stripHtml(html) {
 }
 
 function storyLink(article) {
-  if (article.slug) return `/blog/${article.slug}`;
-  return `/blog?article=${article.id}`;
+  if (article.slug) return `/Stories/${article.slug}`;
+  return `/Stories?article=${article.id}`;
 }
 
 function ArticleDetail({ article, related }) {
-  const excerpt = article.excerpt || stripHtml(article.content).slice(0, 160);
-  const canonicalUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/blog/${article.slug || article.id}`
-    : "";
-
-  useSEO({
-    title: article.title,
-    description: excerpt,
-    image: article.cover_image,
-    url: canonicalUrl,
-    type: "article",
-    jsonLd: {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": article.title,
-      "description": excerpt,
-      "image": article.cover_image,
-      "datePublished": article.publish_date,
-      "author": { "@type": "Person", "name": article.author || "HXToys" },
-      "publisher": {
-        "@type": "Organization",
-        "name": "HXToys",
-        "logo": { "@type": "ImageObject", "url": "https://base44.com/logo_v2.svg" }
-      },
-      "url": canonicalUrl,
-    }
-  });
-
   return (
     <div className="min-h-screen bg-white">
       {article.cover_image && (
@@ -62,7 +33,7 @@ function ArticleDetail({ article, related }) {
       )}
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <Link to="/blog" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-8">
+        <Link to="/Stories" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-8">
           <ArrowLeft className="w-4 h-4" /> All Stories
         </Link>
 
@@ -140,7 +111,7 @@ function ArticleDetail({ article, related }) {
         )}
 
         <div className="mt-10">
-          <Link to="/blog">
+          <Link to="/Stories">
             <span className="inline-flex items-center gap-2 text-sm text-sky-600 font-medium hover:underline">
               <ArrowLeft className="w-4 h-4" /> Back to all stories
             </span>
@@ -194,55 +165,6 @@ function StoryCard({ article, index }) {
   );
 }
 
-function StoriesList({ articles }) {
-  useSEO({
-    title: "Blog & Stories",
-    description: "Company updates, factory news, partnerships, trade shows and social impact activities from HXToys.",
-  });
-
-  const featured = articles.filter((a) => a.is_featured);
-  const rest = articles.filter((a) => !a.is_featured);
-
-  return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <SectionHeading badge="Blog" title="Stories from HXToys" subtitle="Company updates, factory news, partnerships, and social impact activities." />
-
-        {articles.length === 0 && (
-          <div className="mt-24 text-center text-slate-400">
-            <p className="text-5xl mb-4">📰</p>
-            <p className="text-sm">No stories published yet. Check back soon!</p>
-          </div>
-        )}
-
-        {featured.length > 0 && (
-          <div className="mt-12 grid md:grid-cols-2 gap-6">
-            {featured.slice(0, 2).map((art, i) => (
-              <motion.div key={art.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-                <Link to={storyLink(art)} className="group block relative rounded-3xl overflow-hidden aspect-[4/3] bg-slate-100">
-                  {art.cover_image && <img src={art.cover_image} alt={art.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 p-6">
-                    <span className="inline-block text-xs font-semibold text-sky-300 uppercase tracking-wider mb-2">{art.category}</span>
-                    <h2 className="text-xl font-bold text-white mb-1 group-hover:text-sky-200 transition-colors line-clamp-2">{art.title}</h2>
-                    {art.publish_date && <p className="text-xs text-white/60">{formatDate(art.publish_date)}</p>}
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        )}
-
-        {rest.length > 0 && (
-          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {rest.map((art, i) => <StoryCard key={art.id} article={art} index={i} />)}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export default function Stories() {
   const [searchParams] = useSearchParams();
   const { slug } = useParams();
@@ -279,5 +201,45 @@ export default function Stories() {
     return <ArticleDetail article={article} related={related} />;
   }
 
-  return <StoriesList articles={articles} />;
+  const featured = articles.filter((a) => a.is_featured);
+  const rest = articles.filter((a) => !a.is_featured);
+
+  return (
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <SectionHeading badge="Stories" title="Stories from Shoreplay" subtitle="Company updates, factory news, partnerships, and social impact activities." />
+
+        {articles.length === 0 && (
+          <div className="mt-24 text-center text-slate-400">
+            <p className="text-5xl mb-4">📰</p>
+            <p className="text-sm">No stories published yet. Check back soon!</p>
+          </div>
+        )}
+
+        {featured.length > 0 && (
+          <div className="mt-12 grid md:grid-cols-2 gap-6">
+            {featured.slice(0, 2).map((art, i) => (
+              <motion.div key={art.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
+                <Link to={storyLink(art)} className="group block relative rounded-3xl overflow-hidden aspect-[4/3] bg-slate-100">
+                  {art.cover_image && <img src={art.cover_image} alt={art.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 p-6">
+                    <span className="inline-block text-xs font-semibold text-sky-300 uppercase tracking-wider mb-2">{art.category}</span>
+                    <h2 className="text-xl font-bold text-white mb-1 group-hover:text-sky-200 transition-colors line-clamp-2">{art.title}</h2>
+                    {art.publish_date && <p className="text-xs text-white/60">{formatDate(art.publish_date)}</p>}
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {rest.length > 0 && (
+          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {rest.map((art, i) => <StoryCard key={art.id} article={art} index={i} />)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
