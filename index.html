@@ -14,6 +14,20 @@
     <meta property="og:description" content="HXToys manufactures premium beach and outdoor toys for children. Wholesale & OEM/ODM services available worldwide." />
     <meta property="og:image" content="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80" />
     <meta name="twitter:card" content="summary_large_image" />
+    <script type="text/javascript">
+      // GitHub Pages SPA redirect handler
+      // Reads the path encoded by 404.html and restores it via history.replaceState
+      (function(l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search.slice(1).split('&').map(function(s) {
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
   </head>
   <body>
     <div id="root"></div>
