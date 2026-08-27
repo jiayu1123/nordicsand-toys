@@ -1,0 +1,61 @@
+{
+  "name": "AboutSettings",
+  "type": "object",
+  "properties": {
+    "hero_label": {
+      "type": "string",
+      "description": "Small label above heading (e.g. 'Our Story')"
+    },
+    "hero_heading": {
+      "type": "string",
+      "description": "Main hero heading"
+    },
+    "hero_paragraph": {
+      "type": "string",
+      "description": "Hero intro paragraph"
+    },
+    "hero_image": {
+      "type": "string",
+      "description": "Hero image URL"
+    },
+    "stats": {
+      "type": "array",
+      "description": "Stats row (number + label each)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "values_title": {
+      "type": "string",
+      "description": "Values section heading (e.g. 'What Drives Us')"
+    },
+    "values_subtitle": {
+      "type": "string",
+      "description": "Values section subtitle"
+    },
+    "values": {
+      "type": "array",
+      "description": "Brand value cards",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "desc": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": []
+}

@@ -1,0 +1,83 @@
+{
+  "name": "News",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Article title"
+    },
+    "slug": {
+      "type": "string",
+      "description": "SEO-friendly URL slug (auto-generated from title)"
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Short subtitle or teaser"
+    },
+    "excerpt": {
+      "type": "string",
+      "description": "Short summary shown on the listing page"
+    },
+    "cover_image": {
+      "type": "string",
+      "description": "Cover image URL"
+    },
+    "gallery_images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Additional gallery image URLs"
+    },
+    "content": {
+      "type": "string",
+      "description": "Full article content (rich text HTML)"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Company News",
+        "New Collection",
+        "Manufacturing",
+        "Safety",
+        "Trade Shows",
+        "Press"
+      ],
+      "description": "Article category"
+    },
+    "publish_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Publication date"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author name"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Article tags"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Pin this article to the top"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "published",
+        "draft"
+      ],
+      "default": "draft",
+      "description": "Publication status"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ]
+}

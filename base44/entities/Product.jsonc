@@ -1,0 +1,128 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Product name"
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Short product subtitle"
+    },
+    "sku": {
+      "type": "string",
+      "description": "Product SKU code"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Beach Bucket Sets",
+        "Sand Molds",
+        "Water Play Toys",
+        "Beach Tools",
+        "Play Sets",
+        "New Arrivals"
+      ],
+      "description": "Product category"
+    },
+    "collection": {
+      "type": "string",
+      "description": "Collection or series name"
+    },
+    "age_group": {
+      "type": "string",
+      "enum": [
+        "0-2",
+        "3-4",
+        "5-6",
+        "3-6",
+        "All Ages"
+      ],
+      "description": "Recommended age group"
+    },
+    "main_image": {
+      "type": "string",
+      "description": "Main product image URL"
+    },
+    "gallery_images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Additional product images"
+    },
+    "description": {
+      "type": "string",
+      "description": "Full product description"
+    },
+    "highlights": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key selling points / feature highlights"
+    },
+    "material": {
+      "type": "string",
+      "description": "Material information"
+    },
+    "dimensions": {
+      "type": "string",
+      "description": "Product size/dimensions"
+    },
+    "pieces_included": {
+      "type": "number",
+      "description": "Number of pieces in the set"
+    },
+    "packaging_type": {
+      "type": "string",
+      "description": "Packaging type (mesh bag, box, etc.)"
+    },
+    "packaging_dimensions": {
+      "type": "string",
+      "description": "Packaging dimensions"
+    },
+    "weight": {
+      "type": "string",
+      "description": "Product weight"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Feature tags (e.g. BPA Free, Eco-Friendly, CE Certified)"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is a featured/best-selling product"
+    },
+    "is_new": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is a new arrival"
+    },
+    "sort_order": {
+      "type": "number",
+      "default": 0,
+      "description": "Sort order for display"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "draft",
+        "archived"
+      ],
+      "default": "active",
+      "description": "Product visibility status"
+    }
+  },
+  "required": [
+    "name",
+    "sku",
+    "category"
+  ]
+}

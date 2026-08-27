@@ -1,0 +1,43 @@
+{
+  "name": "ContactSettings",
+  "type": "object",
+  "properties": {
+    "section_title": {
+      "type": "string",
+      "description": "Title for the contact info section (e.g. 'Get in Touch')"
+    },
+    "email": {
+      "type": "string",
+      "description": "Main contact email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Phone number"
+    },
+    "whatsapp": {
+      "type": "string",
+      "description": "WhatsApp number (with country code, no spaces)"
+    },
+    "address": {
+      "type": "string",
+      "description": "Physical address"
+    },
+    "working_hours": {
+      "type": "string",
+      "description": "Working hours description"
+    },
+    "wholesale_email": {
+      "type": "string",
+      "description": "Wholesale / B2B contact email"
+    },
+    "wholesale_title": {
+      "type": "string",
+      "description": "Wholesale card title"
+    },
+    "wholesale_text": {
+      "type": "string",
+      "description": "Wholesale card body text"
+    }
+  },
+  "required": []
+}
