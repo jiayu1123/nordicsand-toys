@@ -65,7 +65,8 @@ export default function Footer() {
               {contact.address && (
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
-                  <span className="text-sm text-slate-400">{contact.address}</span>
+                  <span className="text-sm text-slate-400 whitespace-pre-line">30 N Gould St Ste N
+Sheridan, WY 82801</span>
                 </div>
               )}
             </div>
