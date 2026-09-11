@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 const DEFAULTS = {
   section_title: "Get in Touch",
   email: "info@shoreplay.com",
-  phone: "+1 8574075778",
+  phone: "+86 123 456 7890",
   whatsapp: "861234567890",
   address: "Shantou, Guangdong, China 515000",
   working_hours: "Mon–Fri, 9:00 AM – 6:00 PM (GMT+8)",
