@@ -59,7 +59,7 @@ export default function Footer() {
               {contact.phone && (
                 <div className="flex items-start gap-3">
                   <Phone className="w-4 h-4 text-sky-400 mt-0.5 shrink-0" />
-                  <span className="text-sm text-slate-400">+1 8574075778</span>
+                  <span className="text-sm text-slate-400">{contact.phone}</span>
                 </div>
               )}
               {contact.address && (
