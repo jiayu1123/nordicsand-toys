@@ -138,7 +138,7 @@ export default function About() {
                 Modern Manufacturing, Trusted Quality
               </h2>
               <p className="text-slate-500 leading-relaxed mb-6">
-                Our 15,000 sqm facility in Shantou is equipped with modern injection molding, painting, and assembly lines. We maintain strict quality control at every stage, from raw material inspection to final packaging.
+                Our modern facility is equipped with advanced injection molding, painting, and assembly lines. We maintain strict quality control at every stage, from raw material inspection to final packaging.
               </p>
               <ul className="space-y-3">
                 {[
