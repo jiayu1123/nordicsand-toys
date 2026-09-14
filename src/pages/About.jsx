@@ -21,7 +21,7 @@ const milestones = [
   { year: "2009", text: "Company Founded" },
   { year: "2012", text: "First European export orders" },
   { year: "2015", text: "CE & EN-71 certification achieved" },
-  { year: "2018", text: "Expanded to 15,000 sqm modern factory" },
+  { year: "2018", text: "Expanded to modern factory facility" },
   { year: "2021", text: "Launched eco-friendly product line" },
   { year: "2024", text: "Serving 50+ countries worldwide" },
 ];
